@@ -3,7 +3,7 @@ import 'package:guarda_digital_flutter/core/widgets/action_button_widget.dart';
 
 class CofreCard extends StatelessWidget {
   final String? title;
-  final Widget? description; // Changed from String? to Widget?
+  final Widget? description;
   final IconData? icon;
   final Color? backgroundColor;
   final double? width;

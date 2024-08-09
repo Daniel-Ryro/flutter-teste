@@ -29,9 +29,7 @@ class SignUpScreen extends StatelessWidget {
                     },
                   ),
                   TextButton(
-                    onPressed: () {
-                      // Ação ao clicar em "Cancelar"
-                    },
+                    onPressed: () {},
                     child: Text(
                       S.of(context).cancel,
                       style: TextStyle(

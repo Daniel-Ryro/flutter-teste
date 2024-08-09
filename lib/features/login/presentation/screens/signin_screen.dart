@@ -76,9 +76,7 @@ class SignInScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomLeft,
                 child: TextButton(
-                  onPressed: () {
-                    // Ação de esquecimento de senha
-                  },
+                  onPressed: () {},
                   child: Text(
                     'Esqueceu a senha?',
                     style: TextStyle(

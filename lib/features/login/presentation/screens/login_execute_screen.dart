@@ -37,7 +37,7 @@ class LoginExecuteScreen extends StatelessWidget {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 0.4.sh, // Proporcional ao tamanho da tela
+                        height: 0.4.sh,
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage(
@@ -52,7 +52,7 @@ class LoginExecuteScreen extends StatelessWidget {
                         left: 0,
                         right: 0,
                         child: Container(
-                          height: 0.2.sh, // Proporcional ao tamanho da tela
+                          height: 0.2.sh,
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
