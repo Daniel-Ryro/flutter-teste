@@ -30,5 +30,10 @@
   "emailAddress": "Email Address",
   "newPassword": "New Password",
   "confirmNewPassword": "Confirm New Password",
-  "create": "Create"
+  "userDetails": "User Details",
+  "emailAddress": "Email Address",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "create": "Create",
+  "signInWithEmail": "Sign in with email"
 }

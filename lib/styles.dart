@@ -5,6 +5,7 @@ class AppColors {
   static const Color pink = Color(0xFFE434EC);
   static const Color onbackground = Color(0xFFF4E2F5);
   static const Color primaryVariant = Color(0xFF3700B3);
+  static const Color sendCode = Color(0xFF296EC6);
 
   static const Color secondary = Color(0xFF03DAC6);
   static const Color secondaryVariant = Color(0xFF018786);

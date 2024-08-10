@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../features/login/presentation/screens/login_execute_screen.dart';
-import '../features/login/presentation/screens/login_screen.dart';
-import '../features/login/presentation/screens/signin_screen.dart';
-import '../features/login/presentation/screens/signup_screen.dart';
+import '../features/account/presentation/screens/notify_guard_screen.dart';
+import '../features/account/presentation/screens/landing_screen.dart';
+import '../features/account/presentation/screens/signin_screen.dart';
+import '../features/account/presentation/screens/signup_screen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -18,9 +18,9 @@ class AppRoutes {
       case loginExecute:
         return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
       case signUpScreen:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
-        case signInScreen:
-        return MaterialPageRoute(builder: (_) => const SignInScreen());
+        return MaterialPageRoute(builder: (_) =>  SignUpScreen());
+      case signInScreen:
+        return MaterialPageRoute(builder: (_) => SignInScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

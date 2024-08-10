@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
+import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  setupInjection();
   runApp(const MyApp());
 }
 
