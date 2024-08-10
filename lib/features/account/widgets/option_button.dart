@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/widgets/action_button_widget.dart';
+import '../../../core/widgets/action_button_widget.dart';
 
 class OptionButton extends StatelessWidget {
   final String text;

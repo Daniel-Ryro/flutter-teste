@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../generated/l10n.dart';
-import '../../../../routes/app_routes.dart';
-import '../../../../styles.dart';
+import '../../../generated/l10n.dart';
+import '../../../routes/app_routes.dart';
+import '../../../styles.dart';
 import '../widgets/login_header.dart';
 import '../widgets/notification_button.dart';
 import '../widgets/option_button.dart';
@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       buttonColor: AppColors.pink,
                       textColor: AppColors.onPrimary,
-                      iconPath: 'assets/icon/cadastrar.svg',
+                      iconPath: 'assets/icon/cadastrar_ic.svg',
                     ),
                   ),
                   SizedBox(height: 32.h),

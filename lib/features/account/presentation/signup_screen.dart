@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../core/widgets/action_button_widget.dart';
-import '../../../../generated/l10n.dart';
-import '../../../../styles.dart';
+import '../../../core/widgets/action_button_widget.dart';
+import '../../../generated/l10n.dart';
+import '../../../styles.dart';
 import '../widgets/back_button_row.dart';
 import '../widgets/text_input_field.dart';
 
@@ -28,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SvgPicture.asset(
-                      'assets/icon/guarda-digital.svg',
+                      'assets/icon/guarda_logo_ic.svg',
                       width: 198.w,
                       colorFilter: const ColorFilter.mode(
                         AppColors.primary,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../styles.dart';
+import '../../../styles.dart';
 
 class LoginHeader extends StatelessWidget {
   final double containerHeight;
@@ -66,7 +66,7 @@ class LoginHeader extends StatelessWidget {
           right: 0,
           child: Center(
             child: SvgPicture.asset(
-              'assets/icon/guarda-digital.svg',
+              'assets/icon/guarda_logo_ic.svg',
               width: logoWidth.w,
               colorFilter: const ColorFilter.mode(
                 AppColors.primary,

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 import 'package:guarda_digital_flutter/core/widgets/action_button_widget.dart';
-import '../../../../generated/l10n.dart';
+import '../../../generated/l10n.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/forgot_password_link.dart';
 
@@ -36,7 +36,7 @@ class SignInScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(
-                'assets/icon/guarda-digital.svg',
+                'assets/icon/guarda_logo_ic.svg',
                 height: 198.h,
               ),
               SizedBox(height: 16.h),

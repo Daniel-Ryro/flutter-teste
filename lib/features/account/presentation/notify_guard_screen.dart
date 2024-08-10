@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 
-import '../../../../core/widgets/rectangle_card.dart';
-import '../../../../generated/l10n.dart';
+import '../../../core/widgets/rectangle_card.dart';
+import '../../../generated/l10n.dart';
+import '../../../routes/app_routes.dart';
 import '../widgets/access_description.dart';
 import '../widgets/login_header.dart';
 
@@ -65,7 +66,7 @@ class LoginExecuteScreen extends StatelessWidget {
                     bold: true,
                     buttonText: S.of(context).access,
                     onButtonPressed: () {
-                      print('Botão pressionado');
+                      Navigator.pushNamed(context, AppRoutes.homeScreen);
                     },
                     buttonColor: AppColors.primary,
                     buttonTextColor: Colors.white,

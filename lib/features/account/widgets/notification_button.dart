@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/widgets/action_button_widget.dart';
-import '../../../../generated/l10n.dart';
-import '../../../../routes/app_routes.dart';
-import '../../../../styles.dart';
+import '../../../core/widgets/action_button_widget.dart';
+import '../../../generated/l10n.dart';
+import '../../../routes/app_routes.dart';
+import '../../../styles.dart';
 
 class NotificationButton extends StatelessWidget {
   const NotificationButton({super.key});
