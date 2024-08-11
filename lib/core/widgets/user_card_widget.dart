@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:guarda_digital_flutter/styles.dart';
 
 class CompactUserCard extends StatelessWidget {
   final String name;
@@ -32,10 +35,19 @@ class CompactUserCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: avatarRadius,
-                backgroundColor: avatarColor,
-                child: Icon(Icons.person, color: Colors.white, size: iconSize),
+              Container(
+                padding: const EdgeInsets.all(3.0),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundColor: avatarColor,
+                    child: SvgPicture.asset(
+                      'assets/icon/person_ic.svg',
+                      width: 26.w,
+                    )),
               ),
               const SizedBox(width: 16.0),
               Expanded(

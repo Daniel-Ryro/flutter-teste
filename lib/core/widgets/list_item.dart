@@ -8,16 +8,18 @@ class ListItem extends StatelessWidget {
   final double fontSize;
   final Color iconColor;
   final double iconSize;
+  final bool bold; // Novo parâmetro para definir se o texto será bold
 
   const ListItem({
     super.key,
     required this.text,
-    required this.onTap, 
+    required this.onTap,
     required this.boxDecorationColor,
     required this.fontSize,
     required this.iconColor,
     required this.iconSize,
     required this.textColor,
+    this.bold = false, // Inicializando o parâmetro bold como false
   });
 
   @override
@@ -47,11 +49,13 @@ class ListItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: fontSize,
                 color: textColor,
+                fontWeight: bold ? FontWeight.bold : FontWeight.normal,
               ),
             ),
             Icon(
               Icons.chevron_right,
               color: iconColor,
+              size: iconSize,
             ),
           ],
         ),

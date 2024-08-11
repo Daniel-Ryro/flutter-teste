@@ -1,85 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_digital_flutter/features/vault/presentation/beneficiary_content.dart';
+import 'package:guarda_digital_flutter/features/vault/presentation/vault_content.dart';
+import 'package:guarda_digital_flutter/features/vault/presentation/executors_content.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:guarda_digital_flutter/styles.dart';
+
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/custom_bottom_navigation_bar.dart';
-import '../widgets/vault_section.dart';
+import '../../../core/widgets/icon_rounded_button.dart';
 
-class VaultScreen extends StatelessWidget {
+class VaultScreen extends StatefulWidget {
   const VaultScreen({super.key});
+
+  @override
+  _VaultScreenState createState() => _VaultScreenState();
+}
+
+class _VaultScreenState extends State<VaultScreen> {
+  int _selectedTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        actions: [
-          // Adicione as ações da AppBar aqui, se necessário
-        ],
+      backgroundColor: AppColors.onbackground,
+      appBar: CustomAppBar(
+        actions: _buildAppBarActions(),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CofreSection(
-              title: 'Meu Cofre',
-              description: 'Resumo de todas as informações do seu testamento digital',
-              svgPath: 'assets/icon/vault_ic.svg',
-            ),
-            SizedBox(height: 16.h),
-            CofreSection(
-              title: 'Versão Cofre',
-              description: 'Clique no botão para ver o histórico das versões',
-              svgPath: 'assets/icon/version_ic.svg',
-              actionWidget: Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: Colors.pinkAccent,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: const Text(
-                  '1/6',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            CofreSection(
-              title: 'Assinatura Digital',
-              description: 'Clique no botão e assine digitalmente o seu testamento digital',
-              svgPath: 'assets/icon/signature_ic.svg',
-              actionWidget: Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: const Text(
-                  'CERTIFICADO DIGITAL',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            CofreSection(
-              title: 'Itens obrigatórios',
-              description: 'Esses itens são obrigatórios para gerar o cofre',
-              svgPath: 'assets/icon/mandatory_ic.svg',
-              actionWidget: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildMandatoryItem('Meu perfil'),
-                  SizedBox(height: 8.h),
-                  _buildMandatoryItem('Executores'),
-                ],
-              ),
-            ),
-            // Adicione mais CofreSections conforme necessário
+            _buildIconButtonsRow(),
+            SizedBox(height: 4.h),
+            _buildContent(),
           ],
         ),
       ),
@@ -87,20 +42,57 @@ class VaultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMandatoryItem(String title) {
+  List<Widget> _buildAppBarActions() {
+    return [
+      _buildAppBarIcon('assets/icon/notification_ic.svg'),
+      _buildAppBarIcon('assets/icon/help_ic.svg'),
+      _buildAppBarIcon('assets/icon/user_setting_ic.svg'),
+    ];
+  }
+
+  Widget _buildAppBarIcon(String svgPath) {
+    return IconButton(
+      icon: SvgPicture.asset(svgPath, width: 24.w, height: 24.h),
+      onPressed: () {},
+    );
+  }
+
+  Widget _buildIconButtonsRow() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 16.sp,
-          ),
-        ),
-        Icon(Icons.check_circle, color: Colors.green, size: 20.sp),
+        _buildIconButton('assets/icon/vault_ic.svg', 0),
+        SizedBox(width: 10.w),
+        _buildIconButton('assets/icon/comunity_ic.svg', 1),
+        SizedBox(width: 10.w),
+        _buildIconButton('assets/icon/persons_ic.svg', 2),
       ],
     );
+  }
+
+  Widget _buildIconButton(String svgPath, int index) {
+    return IconRoundedButton(
+      svgPath: svgPath,
+      color: _selectedTabIndex == index ? AppColors.pink : AppColors.primary,
+      onPressed: () {
+        setState(() {
+          _selectedTabIndex = index;
+        });
+      },
+      width: 64.w,
+      height: 64.h,
+      iconSize: 36.sp,
+      iconColor: Colors.white,
+    );
+  }
+
+  Widget _buildContent() {
+    switch (_selectedTabIndex) {
+      case 1:
+        return const ExecutorsContent();
+      case 2:
+        return const BeneficiaryContent();
+      default:
+        return const VaultContent();
+    }
   }
 }

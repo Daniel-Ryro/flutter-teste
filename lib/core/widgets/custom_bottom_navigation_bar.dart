@@ -71,7 +71,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           svgPath,
-          width: 20.0, // Tamanho do ícone SVG dentro do círculo
+          width: 20.0,
         ),
       ),
       label: label,

@@ -21,7 +21,7 @@ class RectangleButton extends StatelessWidget {
         backgroundColor: color,
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(5.0),
         ),
       ),
       child: Container(

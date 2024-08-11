@@ -5,6 +5,7 @@ import '../features/account/presentation/landing_screen.dart';
 import '../features/account/presentation/signin_screen.dart';
 import '../features/account/presentation/signup_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/vault/presentation/executors_content.dart';
 import '../features/vault/presentation/vault_screen.dart';
 
 class AppRoutes {
@@ -22,14 +23,14 @@ class AppRoutes {
       case loginExecute:
         return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
       case signUpScreen:
-        return MaterialPageRoute(builder: (_) =>  const SignUpScreen());
+        return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case signInScreen:
         return MaterialPageRoute(builder: (_) => const SignInScreen());
       case homeScreen:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());  
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       case vaultScreen:
-        return MaterialPageRoute(builder: (_) => const VaultScreen());  
-        default:
+        return MaterialPageRoute(builder: (_) => const VaultScreen());
+      default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
             body: Center(

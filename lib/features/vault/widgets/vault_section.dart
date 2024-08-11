@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class CofreSection extends StatelessWidget {
+class VaultSection extends StatelessWidget {
   final String title;
   final String description;
-  final String svgPath;
+  final String? svgPath; // Changed to nullable type
   final Widget? actionWidget;
+  final Color? backgroundColor;
+  final Color? iconColor;
+  final Color? textColor;
+  final double? width;
+  final double? height;
+  final double? titleFontSize;
+  final double? descriptionFontSize;
 
-  const CofreSection({
+  const VaultSection({
     super.key,
     required this.title,
     required this.description,
-    required this.svgPath,
+    this.svgPath,
     this.actionWidget,
+    this.backgroundColor,
+    this.iconColor,
+    this.textColor,
+    this.width,
+    this.height,
+    this.titleFontSize,
+    this.descriptionFontSize,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width ?? double.infinity,
+      height: height,
       padding: EdgeInsets.all(12.w),
       margin: EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
@@ -37,18 +53,23 @@ class CofreSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              SvgPicture.asset(
-                svgPath,
-                width: 24.w,
-                height: 24.h,
-                color: Colors.purple, // Define a cor do ícone
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
+              if (svgPath != null) ...[
+                SvgPicture.asset(
+                  svgPath!,
+                  width: 24.w,
+                  height: 24.h,
+                  color: iconColor ?? Colors.purple,
+                ),
+                SizedBox(width: 8.w),
+              ],
+              Flexible(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: titleFontSize ?? 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: textColor ?? Colors.black,
+                  ),
                 ),
               ),
             ],
@@ -57,8 +78,8 @@ class CofreSection extends StatelessWidget {
           Text(
             description,
             style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[600],
+              fontSize: descriptionFontSize ?? 14.sp,
+              color: textColor ?? Colors.grey[600],
             ),
           ),
           if (actionWidget != null) ...[

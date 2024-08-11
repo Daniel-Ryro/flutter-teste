@@ -213,7 +213,7 @@ class ExecutorForm extends StatelessWidget {
           if (insertPhotoLabel != null)
             ElevatedButton.icon(
               onPressed: onInsertPhoto ?? () {},
-              icon: const Icon(Icons.photo, color: Colors.white),
+              icon: const Icon(Icons.file_upload_outlined, color: Colors.white),
               label: Text(
                 insertPhotoLabel!,
                 style: TextStyle(color: insertPhotoTextColor ?? Colors.white),

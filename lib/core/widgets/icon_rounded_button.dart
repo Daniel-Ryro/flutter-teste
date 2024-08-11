@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class IconRoundedButton extends StatelessWidget {
-  final IconData icon;
+  final String svgPath;
   final Color color;
   final VoidCallback onPressed;
   final double width;
@@ -9,9 +10,9 @@ class IconRoundedButton extends StatelessWidget {
   final double iconSize;
   final Color iconColor;
 
-  const IconRoundedButton ({
+  const IconRoundedButton({
     super.key,
-    required this.icon,
+    required this.svgPath,
     required this.color,
     required this.onPressed,
     required this.width,
@@ -32,10 +33,11 @@ class IconRoundedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
-          child: Icon(
-            icon,
+          child: SvgPicture.asset(
+            svgPath,
             color: iconColor,
-            size: iconSize,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
       ),
