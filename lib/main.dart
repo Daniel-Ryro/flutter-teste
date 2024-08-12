@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Guarda Digital',
-          initialRoute: AppRoutes.main,
+          initialRoute: AppRoutes.login,
           onGenerateRoute: AppRoutes.generateRoute,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

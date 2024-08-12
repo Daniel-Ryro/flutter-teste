@@ -1,43 +1,40 @@
-// import 'package:flutter_appauth/flutter_appauth.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import '../../../../core/utils/constants.dart';
 
-// class AuthRemoteDataSource {
-//   final FlutterAppAuth appAuth;
-//   final FlutterSecureStorage secureStorage;
 
-//   AuthRemoteDataSource({required this.appAuth, required this.secureStorage});
+// import '../repositories/auth_repository.dart';
 
-//   Future<void> login() async {
+// class AuthRepositoryImpl implements AuthRepository {
+//   final MSALPublicClientApplication _msalClient;
+  
+//   AuthRepositoryImpl(this._msalClient);
+
+//   @override
+//   Future<User?> signIn() async {
 //     try {
-//       final AuthorizationTokenResponse? result =
-//           await appAuth.authorizeAndExchangeCode(
-//         AuthorizationTokenRequest(
-//           ApiConstants.clientId,
-//           ApiConstants.redirectUri,
-//           issuer: ApiConstants.issuer,
-//           scopes: ApiConstants.scopes,
-//           serviceConfiguration: const AuthorizationServiceConfiguration(
-//             authorizationEndpoint: ApiConstants.authorizationEndpoint,
-//             tokenEndpoint: ApiConstants.tokenEndpoint,
-//           ),
-//         ),
+//       final result = await _msalClient.acquireTokenInteractive(
+//         ['User.Read'],
+//         authority: 'https://guardadigitalb2c.b2clogin.com/tfp/guardadigitalb2c.onmicrosoft.com/B2C_1_signin',
+//         redirectUri: 'br.com.guardadigital.authapp://oauthredirect',
 //       );
 
 //       if (result != null) {
-//         await secureStorage.write(
-//             key: 'access_token', value: result.accessToken);
+//         return User(
+//           id: result.account.identifier,
+//           name: result.account.username,
+//           email: result.account.username,
+//         );
 //       }
 //     } catch (e) {
-//       print('Error during login: $e');
+//       print('Login failed: $e');
 //     }
+//     return null;
 //   }
 
-//   Future<void> logout() async {
-//     await secureStorage.delete(key: 'access_token');
-//   }
-
-//   Future<String?> getAccessToken() async {
-//     return await secureStorage.read(key: 'access_token');
+//   @override
+//   Future<void> signOut() async {
+//     try {
+//       await _msalClient.signOut();
+//     } catch (e) {
+//       print('Logout failed: $e');
+//     }
 //   }
 // }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_digital_flutter/core/widgets/action_button_widget.dart';
+import 'package:guarda_digital_flutter/styles.dart';
 
 class ExecutorForm extends StatelessWidget {
   final String? title;
@@ -23,6 +24,12 @@ class ExecutorForm extends StatelessWidget {
   final VoidCallback? onSave;
   final VoidCallback? onCancel;
 
+  // New dropdown parameters
+  final String? dropdownLabel;
+  final List<String>? dropdownItems;
+  final String? selectedDropdownItem;
+  final ValueChanged<String?>? onDropdownChanged;
+
   const ExecutorForm({
     Key? key,
     this.title,
@@ -45,6 +52,11 @@ class ExecutorForm extends StatelessWidget {
     this.saveButtonTextColor,
     this.onSave,
     this.onCancel,
+    // New dropdown parameters
+    this.dropdownLabel,
+    this.dropdownItems,
+    this.selectedDropdownItem,
+    this.onDropdownChanged,
   }) : super(key: key);
 
   @override
@@ -76,35 +88,18 @@ class ExecutorForm extends StatelessWidget {
           const SizedBox(height: 16.0),
           const Divider(thickness: 1.0),
           const SizedBox(height: 16.0),
-          if (firstNameLabel != null)
+          if (dropdownLabel != null && dropdownItems != null)
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: firstNameLabel,
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: Colors.pink),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 12.0),
-                  ),
+                Text(
+                  dropdownLabel!,
+                  style: const TextStyle(color: Colors.black87),
                 ),
                 const SizedBox(height: 8.0),
-              ],
-            ),
-          if (secondNameLabel != null)
-            Column(
-              children: [
-                TextField(
+                DropdownButtonFormField<String>(
+                  value: selectedDropdownItem,
                   decoration: InputDecoration(
-                    labelText: secondNameLabel,
-                    labelStyle: const TextStyle(color: Colors.black87),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(color: Colors.grey.shade300),
@@ -113,55 +108,16 @@ class ExecutorForm extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: const BorderSide(color: Colors.pink),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 12.0),
                   ),
+                  items: dropdownItems!.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  onChanged: onDropdownChanged,
                 ),
-                const SizedBox(height: 8.0),
-              ],
-            ),
-          if (lastNameLabel != null)
-            Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: lastNameLabel,
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: Colors.pink),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 12.0),
-                  ),
-                ),
-                const SizedBox(height: 8.0),
-              ],
-            ),
-          if (emailLabel != null)
-            Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: emailLabel,
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: Colors.pink),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 12.0),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 20.0),
               ],
             ),
           if (birthDateLabel != null)
@@ -188,45 +144,58 @@ class ExecutorForm extends StatelessWidget {
                 const SizedBox(height: 8.0),
               ],
             ),
-          if (phoneLabel != null)
-            Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: phoneLabel,
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: Colors.pink),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 12.0),
+          // Instruções TextField
+          TextField(
+            decoration: InputDecoration(
+              labelText: 'Instruções',
+              labelStyle: const TextStyle(color: Colors.black87),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: const BorderSide(color: Colors.pink),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+            ),
+            maxLines: 3,
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.file_upload_outlined, color: AppColors.primary),
+                label: const Text('Procurar no dispositivo'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
+                  minimumSize: const Size(150, 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22.0),
+                  ),
+                  side: const BorderSide(color: AppColors.primary),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.camera_alt, color: Colors.white),
+                label: const Text('Tirar foto'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purpleAccent,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22.0),
                   ),
                 ),
-                const SizedBox(height: 20.0),
-              ],
-            ),
-          if (insertPhotoLabel != null)
-            ElevatedButton.icon(
-              onPressed: onInsertPhoto ?? () {},
-              icon: const Icon(Icons.file_upload_outlined, color: Colors.white),
-              label: Text(
-                insertPhotoLabel!,
-                style: TextStyle(color: insertPhotoTextColor ?? Colors.white),
               ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: insertPhotoColor ?? Colors.pink,
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 130.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(22.0),
-                ),
-              ),
-            ),
+            ],
+          ),
           const SizedBox(height: 16.0),
           const Divider(thickness: 1.0),
           const SizedBox(height: 16.0),

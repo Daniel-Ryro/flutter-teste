@@ -1,8 +1,13 @@
+// daily_routine_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
+import '../widgets/health_tab_content.dart';
+import '../widgets/my_accounts_tab_content.dart';
+import '../widgets/my_documents_tab_content.dart';
 
 class DailyRoutineScreen extends StatefulWidget {
   const DailyRoutineScreen({super.key});
@@ -55,17 +60,11 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
   Widget _buildContent() {
     switch (_selectedTabIndex) {
       case 0:
-        return Container(
-          child: Text("Conteúdo da primeira aba"),
-        );
+        return const HealthTabContent(); 
       case 1:
-        return Container(
-          child: Text("Conteúdo da segunda aba"),
-        );
+        return const MyDocumentsTabContent();
       case 2:
-        return Container(
-          child: Text("Conteúdo da terceira aba"),
-        );
+        return const MyAccountsTabContent();
       default:
         return Container();
     }

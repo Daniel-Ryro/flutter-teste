@@ -66,7 +66,7 @@ class ActionButton extends StatelessWidget {
               ),
             ),
             if (icon != null && iconPosition == IconPosition.right) ...[
-              const Spacer(),  // Adiciona um espaço flexível entre o texto e o ícone
+              const Spacer(),
               icon!,
             ],
           ],
