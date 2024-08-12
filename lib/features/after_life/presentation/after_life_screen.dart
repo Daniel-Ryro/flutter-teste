@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/assets_estate_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/farewell_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/my_wish_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/tribute_content.dart';
 
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
+import '../widgets/after_life_content.dart';
+import '../widgets/after_life_tab_bar.dart';
+
 
 class AfterLifeScreen extends StatefulWidget {
   const AfterLifeScreen({super.key});
@@ -33,43 +30,19 @@ class _AfterLifeScreenState extends State<AfterLifeScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            child: TabIconRow(
-              icons: const [
-                'assets/icon/money_file_ic.svg',
-                'assets/icon/file_file_ic.svg',
-                'assets/icon/fire_ic.svg',
-                'assets/icon/heart_favorite_ic.svg',
-              ],
-              selectedIndex: _selectedTabIndex,
-              onTabSelected: (index) {
-                setState(() {
-                  _selectedTabIndex = index;
-                });
-              },
-            ),
+          AfterLifeTabBar(
+            selectedIndex: _selectedTabIndex,
+            onTabSelected: (index) {
+              setState(() {
+                _selectedTabIndex = index;
+              });
+            },
           ),
           Expanded(
-            child: _buildContent(),
+            child: AfterLifeContent(selectedIndex: _selectedTabIndex),
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildContent() {
-    switch (_selectedTabIndex) {
-      case 0:
-        return const AssetsEstateContent();
-      case 1:
-        return const TributeContent();
-      case 2:
-        return const FarewellContent();
-      case 3:
-        return const MyWishContent();
-      default:
-        return const AssetsEstateContent();
-    }
   }
 }

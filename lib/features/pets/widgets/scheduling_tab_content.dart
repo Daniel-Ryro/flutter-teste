@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:guarda_digital_flutter/features/pets/widgets/agendamento_item.dart';
+import 'package:guarda_digital_flutter/features/pets/widgets/scheduling_item.dart';
 
 import '../../../core/widgets/action_button_widget.dart';
 
-class AgendamentoTabContent extends StatelessWidget {
-  const AgendamentoTabContent({super.key});
+class SchedulingTabContent extends StatelessWidget {
+  const SchedulingTabContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +33,12 @@ class AgendamentoTabContent extends StatelessWidget {
         Expanded(
           child: ListView(
             children: const [
-              AgendamentoItem(
+              SchedulingItem(
                 date: '24/03/2024',
                 title: 'Vacina',
                 onTap: null,
               ),
-              AgendamentoItem(
+              SchedulingItem(
                 date: '07/05/2024',
                 title: 'Consulta',
                 onTap: null,

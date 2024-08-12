@@ -5,7 +5,7 @@ import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
-import '../widgets/agendamento_tab_content.dart';
+import '../widgets/scheduling_tab_content.dart';
 import '../widgets/pet_card.dart';
 import '../widgets/pet_tab_content.dart';
 
@@ -75,7 +75,7 @@ class _PetsScreenState extends State<PetsScreen> {
                 child: const TabBarView(
                   children: [
                     PetsTabContent(),
-                    AgendamentoTabContent(),
+                    SchedulingTabContent(),
                   ],
                 ),
               ),

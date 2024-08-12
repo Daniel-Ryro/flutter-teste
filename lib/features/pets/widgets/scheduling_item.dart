@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../styles.dart';
 
-class AgendamentoItem extends StatelessWidget {
+class SchedulingItem extends StatelessWidget {
   final String date;
   final String title;
   final VoidCallback? onTap;
 
-  const AgendamentoItem({
+  const SchedulingItem({
     super.key,
     required this.date,
     required this.title,
