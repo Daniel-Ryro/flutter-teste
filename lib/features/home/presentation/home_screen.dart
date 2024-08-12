@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../styles.dart';
 import '../widgets/conference_section.dart';
-import '../../../core/widgets/custom_bottom_navigation_bar.dart';
+import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../widgets/section_grid.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -42,7 +41,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 }

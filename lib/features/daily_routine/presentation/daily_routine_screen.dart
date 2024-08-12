@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/styles.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/beneficiary_content.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/vault_content.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/executors_content.dart';
-
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
+import '../../../styles.dart';
 
-class VaultScreen extends StatefulWidget {
-  const VaultScreen({super.key});
+class DailyRoutineScreen extends StatefulWidget {
+  const DailyRoutineScreen({super.key});
 
   @override
-  _VaultScreenState createState() => _VaultScreenState();
+  _DailyRoutineScreenState createState() => _DailyRoutineScreenState();
 }
 
-class _VaultScreenState extends State<VaultScreen> {
+class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
   int _selectedTabIndex = 0;
 
   @override
@@ -37,9 +33,9 @@ class _VaultScreenState extends State<VaultScreen> {
           children: [
             TabIconRow(
               icons: const [
-                'assets/icon/vault_ic.svg',
-                'assets/icon/comunity_ic.svg',
-                'assets/icon/persons_ic.svg',
+                'assets/icon/heart_ic.svg',
+                'assets/icon/file_ic.svg',
+                'assets/icon/add_person_ic.svg',
               ],
               selectedIndex: _selectedTabIndex,
               onTabSelected: (index) {
@@ -58,12 +54,20 @@ class _VaultScreenState extends State<VaultScreen> {
 
   Widget _buildContent() {
     switch (_selectedTabIndex) {
+      case 0:
+        return Container(
+          child: Text("Conteúdo da primeira aba"),
+        );
       case 1:
-        return const ExecutorsContent();
+        return Container(
+          child: Text("Conteúdo da segunda aba"),
+        );
       case 2:
-        return const BeneficiaryContent();
+        return Container(
+          child: Text("Conteúdo da terceira aba"),
+        );
       default:
-        return const VaultContent();
+        return Container();
     }
   }
 }

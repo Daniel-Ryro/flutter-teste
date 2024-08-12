@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guarda_digital_flutter/features/main/presentation/main_screen.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Guarda Digital',
-          initialRoute: AppRoutes.login,
+          initialRoute: AppRoutes.main,
           onGenerateRoute: AppRoutes.generateRoute,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

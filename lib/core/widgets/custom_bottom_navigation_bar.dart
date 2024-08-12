@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../routes/app_routes.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
+  final Function(int) onTabSelected;
 
-  const CustomBottomNavigationBar({super.key, this.currentIndex = 0});
+  const CustomBottomNavigationBar({
+    super.key,
+    this.currentIndex = 0,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       showSelectedLabels: true,
       showUnselectedLabels: true,
       onTap: (index) {
-        switch (index) {
-          case 0:
-            Navigator.pushNamed(context, AppRoutes.homeScreen);
-            break;
-          case 5:
-            Navigator.pushNamed(context, AppRoutes.vaultScreen);
-            break;
-        }
+        onTabSelected(index);
       },
       items: [
         _buildBottomNavigationBarItem(
