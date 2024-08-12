@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String logoPath;
-  final List<Widget> actions;
+  final String? leftIconPath;
+  final List<String> iconPaths;
+  final double leftIconSize;
 
   const CustomAppBar({
-    super.key,
-    this.logoPath = 'assets/icon/loco_horizontal_ic.svg', // Caminho padrão para o logo
-    this.actions = const [], // Ações padrão vazias
-  });
+    Key? key,
+    this.leftIconPath,
+    this.iconPaths = const [],
+    this.leftIconSize = 32.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       elevation: 0,
-      automaticallyImplyLeading: false,
-      title: SvgPicture.asset(
-        logoPath,
-        height: 24.h,
-      ),
-      actions: actions,
+      leading: leftIconPath != null
+          ? Padding(
+              padding: EdgeInsets.only(left: 16.w),
+              child: SizedBox(
+                width: leftIconSize.w,
+                height: leftIconSize.h,
+                child: SvgPicture.asset(
+                  leftIconPath!,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            )
+          : null,
+      actions: _buildAppBarIcons(),
     );
   }
 
+  List<Widget> _buildAppBarIcons() {
+    return iconPaths.map((svgPath) {
+      return IconButton(
+        icon: SvgPicture.asset(svgPath, width: 24.w, height: 24.h),
+        onPressed: () {},
+      );
+    }).toList();
+  }
+
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(56.h);
 }

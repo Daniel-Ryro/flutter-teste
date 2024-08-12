@@ -53,7 +53,7 @@ class BeneficiaryContent extends StatelessWidget {
             ),
           ),
         ),
-         CompactUserCard(
+        CompactUserCard(
           name: 'John Doe',
           email: 'johndoe@example.com',
           avatarColor: AppColors.pink,
@@ -63,9 +63,7 @@ class BeneficiaryContent extends StatelessWidget {
             Icons.arrow_forward_ios,
             color: Colors.black,
           ),
-          onTap: () {
-            // Handle card tap
-          },
+          onTap: () {},
         ),
       ],
     );
@@ -106,7 +104,6 @@ class BeneficiaryContent extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               onSave: () {
-                // Handle save action
                 Navigator.of(context).pop();
               },
             ),

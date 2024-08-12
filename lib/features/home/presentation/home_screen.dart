@@ -15,32 +15,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
-      appBar: CustomAppBar(
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icon/notification_ic.svg',
-              width: 24.w,
-              height: 24.h,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icon/help_ic.svg',
-              width: 24.w,
-              height: 24.h,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icon/user_setting_ic.svg',
-              width: 24.w,
-              height: 24.h,
-            ),
-            onPressed: () {},
-          ),
+      appBar: const CustomAppBar(
+        leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
+        iconPaths: [
+          'assets/icon/notification_ic.svg',
+          'assets/icon/help_ic.svg',
+          'assets/icon/user_setting_ic.svg',
         ],
       ),
       body: SingleChildScrollView(
