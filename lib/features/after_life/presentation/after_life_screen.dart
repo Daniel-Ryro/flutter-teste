@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/assets_estate.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/assets_estate_content.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/farewell_content.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/my_wish_content.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/tribute_content.dart';
+
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
-
 
 class AfterLifeScreen extends StatefulWidget {
   const AfterLifeScreen({super.key});
@@ -58,15 +61,15 @@ class _AfterLifeScreenState extends State<AfterLifeScreen> {
   Widget _buildContent() {
     switch (_selectedTabIndex) {
       case 0:
-        return const AssetsEstateContent(); // Renderizando a AssetsEstateScreen no case 0
+        return const AssetsEstateContent();
       case 1:
-        return const Center(child: Text("Conteúdo da segunda aba"));
+        return const TributeContent();
       case 2:
-        return const Center(child: Text("Conteúdo da terceira aba"));
+        return const FarewellContent();
       case 3:
-        return const Center(child: Text("Conteúdo da quarta aba"));
+        return const MyWishContent();
       default:
-        return const Center(child: Text("Conteúdo padrão"));
+        return const AssetsEstateContent();
     }
   }
 }

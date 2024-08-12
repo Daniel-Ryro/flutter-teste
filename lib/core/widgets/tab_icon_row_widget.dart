@@ -10,11 +10,11 @@ class TabIconRow extends StatelessWidget {
   final Function(int) onTabSelected;
 
   const TabIconRow({
-    Key? key,
+    super.key,
     required this.icons,
     required this.selectedIndex,
     required this.onTabSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

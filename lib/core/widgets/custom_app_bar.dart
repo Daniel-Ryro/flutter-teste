@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:guarda_digital_flutter/styles.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? leftIconPath;
@@ -8,16 +9,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double leftIconSize;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     this.leftIconPath,
     this.iconPaths = const [],
     this.leftIconSize = 32.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.background,
       elevation: 0,
       leading: leftIconPath != null
           ? Padding(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum IconPosition { left, right }
+
 class ActionButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -12,6 +14,7 @@ class ActionButton extends StatelessWidget {
   final double? height;
   final bool isBold;
   final Widget? icon;
+  final IconPosition iconPosition;
 
   const ActionButton({
     super.key,
@@ -26,6 +29,7 @@ class ActionButton extends StatelessWidget {
     this.height,
     this.isBold = true,
     this.icon,
+    this.iconPosition = IconPosition.left,
   });
 
   @override
@@ -49,7 +53,7 @@ class ActionButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) ...[
+            if (icon != null && iconPosition == IconPosition.left) ...[
               icon!,
               const SizedBox(width: 8),
             ],
@@ -61,6 +65,10 @@ class ActionButton extends StatelessWidget {
                 fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
               ),
             ),
+            if (icon != null && iconPosition == IconPosition.right) ...[
+              const Spacer(),  // Adiciona um espaço flexível entre o texto e o ícone
+              icon!,
+            ],
           ],
         ),
       ),

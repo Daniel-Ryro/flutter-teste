@@ -8,6 +8,7 @@ class AppColors {
   static const Color sendCode = Color(0xFF296EC6);
   static const Color blackDefault = Color(0xFF424242);
   static const Color purpleButton = Color(0xFF73299A);
+  static const Color greyButton = Color(0xFF808080);
 
   static const Color secondary = Color(0xFF03DAC6);
   static const Color secondaryVariant = Color(0xFF018786);
