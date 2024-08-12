@@ -6,12 +6,14 @@ import 'package:guarda_digital_flutter/styles.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? leftIconPath;
   final List<String> iconPaths;
+  final List<VoidCallback?> iconActions;
   final double leftIconSize;
 
   const CustomAppBar({
     super.key,
     this.leftIconPath,
     this.iconPaths = const [],
+    this.iconActions = const [],
     this.leftIconSize = 32.0,
   });
 
@@ -38,12 +40,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   List<Widget> _buildAppBarIcons() {
-    return iconPaths.map((svgPath) {
+    return List<Widget>.generate(iconPaths.length, (index) {
       return IconButton(
-        icon: SvgPicture.asset(svgPath, width: 24.w, height: 24.h),
-        onPressed: () {},
+        icon: SvgPicture.asset(iconPaths[index], width: 24.w, height: 24.h),
+        onPressed: iconActions.isNotEmpty && index < iconActions.length
+            ? iconActions[index]
+            : null,
       );
-    }).toList();
+    });
   }
 
   @override

@@ -18,6 +18,7 @@ class AppRoutes {
   static const String homeScreen = '/homeScreen';
   static const String vaultScreen = '/vaultScreen';
   static const String dailyRoutine = '/dailyRoutineScreen';
+  static const String userSettings = '/userSettingsScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -37,6 +38,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const DailyRoutineScreen());
       case main:
         return MaterialPageRoute(builder: (_) => const MainScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

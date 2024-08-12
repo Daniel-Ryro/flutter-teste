@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guarda_digital_flutter/features/memories/presentation/memory_book_content.dart';
+import 'package:guarda_digital_flutter/features/memories/presentation/my_files_tab_content.dart';
+import 'package:guarda_digital_flutter/features/memories/presentation/time_capsule_tab_content.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
@@ -33,9 +36,9 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
           children: [
             TabIconRow(
               icons: const [
-                'assets/icon/heart_ic.svg',
-                'assets/icon/file_ic.svg',
-                'assets/icon/add_person_ic.svg',
+                'assets/icon/person_memories_ic.svg',
+                'assets/icon/file_memories_ic.svg',
+                'assets/icon/timer_ic.svg',
               ],
               selectedIndex: _selectedTabIndex,
               onTabSelected: (index) {
@@ -44,30 +47,24 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
                 });
               },
             ),
-            SizedBox(height: 4.h),
-            _buildContent(),
+            SizedBox(height: 16.h),
+            _buildContentForTab(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContentForTab() {
     switch (_selectedTabIndex) {
       case 0:
-        return Container(
-          child: Text("Conteúdo da primeira aba"),
-        );
+        return const MemoryBookTabContent();
       case 1:
-        return Container(
-          child: Text("Conteúdo da segunda aba"),
-        );
-      case 2:
-        return Container(
-          child: Text("Conteúdo da terceira aba"),
-        );
+        return const MyFilesTabContent();
+     case 2:
+        return const TimeCapsuleTabContent();
       default:
-        return Container();
+        return const MemoryBookTabContent();
     }
   }
 }
