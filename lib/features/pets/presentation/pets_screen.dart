@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guarda_digital_flutter/features/after_life/widgets/title_section.dart';
 import '../../../core/widgets/custom_app_bar.dart';
+import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../styles.dart';
+import '../widgets/agendamento_tab_content.dart';
+import '../widgets/pet_card.dart';
+import '../widgets/pet_tab_content.dart';
 
 class PetsScreen extends StatefulWidget {
   const PetsScreen({super.key});
@@ -16,58 +21,68 @@ class _PetsScreenState extends State<PetsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.onbackground,
-      appBar: const CustomAppBar(
-        leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
-        iconPaths: [
-          'assets/icon/notification_ic.svg',
-          'assets/icon/help_ic.svg',
-          'assets/icon/user_setting_ic.svg',
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TabIconRow(
-              icons: const [
-                'assets/icon/heart_ic.svg',
-                'assets/icon/file_ic.svg',
-                'assets/icon/add_person_ic.svg',
-              ],
-              selectedIndex: _selectedTabIndex,
-              onTabSelected: (index) {
-                setState(() {
-                  _selectedTabIndex = index;
-                });
-              },
-            ),
-            SizedBox(height: 4.h),
-            _buildContent(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: AppColors.onbackground,
+        appBar: const CustomAppBar(
+          leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
+          iconPaths: [
+            'assets/icon/notification_ic.svg',
+            'assets/icon/help_ic.svg',
+            'assets/icon/user_setting_ic.svg',
           ],
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TabIconRow(
+                icons: const [
+                  'assets/icon/pets_ic.svg',
+                ],
+                selectedIndex: _selectedTabIndex,
+                onTabSelected: (index) {
+                  setState(() {
+                    _selectedTabIndex = index;
+                  });
+                },
+              ),
+              SizedBox(height: 4.h),
+              RectangleButton(
+                text: 'PET',
+                color: AppColors.pink,
+                onPressed: () {},
+              ),
+              SizedBox(height: 16.h),
+              const PetCard(),
+              SizedBox(height: 16.h),
+              const TabBar(
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(width: 4.0, color: AppColors.primary),
+                  insets: EdgeInsets.symmetric(horizontal: 100.0),
+                ),
+                labelColor: AppColors.primary,
+                unselectedLabelColor: Colors.grey,
+                tabs: [
+                  Tab(text: 'Pets'),
+                  Tab(text: 'Agendamentos'),
+                ],
+              ),
+              SizedBox(
+                height: 300.h,
+                child: const TabBarView(
+                  children: [
+                    PetsTabContent(),
+                    AgendamentoTabContent(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget _buildContent() {
-    switch (_selectedTabIndex) {
-      case 0:
-        return Container(
-          child: Text("Conteúdo da primeira aba"),
-        );
-      case 1:
-        return Container(
-          child: Text("Conteúdo da segunda aba"),
-        );
-      case 2:
-        return Container(
-          child: Text("Conteúdo da terceira aba"),
-        );
-      default:
-        return Container();
-    }
   }
 }
