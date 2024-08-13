@@ -26,7 +26,7 @@ class TributeContentCard extends StatelessWidget {
             SizedBox(height: 16.h),
             const RecommendationsSection(),
             SizedBox(height: 16.h),
-            const InstructionsSection(),
+            const GeneralInstructionsSection(),
             SizedBox(height: 16.h),
             ActionButton(
               icon: SvgPicture.asset(

@@ -5,7 +5,7 @@ import '../../../styles.dart';
 import '../../../core/widgets/action_button_widget.dart';
 
 class VideoMessageSection extends StatelessWidget {
-  const VideoMessageSection({Key? key}) : super(key: key);
+  const VideoMessageSection({super.key});
 
   @override
   Widget build(BuildContext context) {

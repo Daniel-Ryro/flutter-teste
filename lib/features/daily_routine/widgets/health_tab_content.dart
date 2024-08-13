@@ -38,7 +38,7 @@ class _HealthTabContentState extends State<HealthTabContent>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10.h),
-        const HeaderSection(),
+        const HealthHeaderSection(),
         SizedBox(height: 16.h),
         TabBar(
           controller: _tabController,

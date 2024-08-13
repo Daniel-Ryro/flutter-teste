@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guarda_digital_flutter/features/after_life/widgets/my_wish_content_card.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../styles.dart';
-import '../widgets/farewell_content_card.dart';
 
-class FarewellContent extends StatelessWidget {
-  const FarewellContent({super.key});
+class MyWishPage extends StatelessWidget {
+  const MyWishPage ({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class FarewellContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               RectangleButton(
-                text: 'DESPEDIDA',
+                text: 'MEUS DESEJOS',
                 color: AppColors.pink,
                 onPressed: () {},
               ),
               SizedBox(height: 16.h),
-              const FarewellContentCard(),
+              const MyWishContentCard(),
             ],
           ),
         ),

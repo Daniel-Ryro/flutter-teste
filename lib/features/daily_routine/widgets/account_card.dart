@@ -6,7 +6,7 @@ import '../../../core/widgets/action_button_widget.dart';
 import '../../../styles.dart';
 
 class AccountCard extends StatelessWidget {
-  const AccountCard({Key? key}) : super(key: key);
+  const AccountCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +68,7 @@ class AccountCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
       ),
-      isScrollControlled:
-          true, // This allows the modal to take up as much space as it needs
+      isScrollControlled: true,
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
@@ -79,8 +78,7 @@ class AccountCard extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Adjust the size to the content
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(

@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../styles.dart';
 
-class InstructionsSection extends StatelessWidget {
-  const InstructionsSection({super.key});
+class GeneralInstructionsSection  extends StatelessWidget {
+  const GeneralInstructionsSection ({super.key});
 
   @override
   Widget build(BuildContext context) {

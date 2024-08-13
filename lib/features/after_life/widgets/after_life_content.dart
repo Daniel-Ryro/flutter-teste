@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/assets_estate_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/farewell_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/my_wish_content.dart';
-import 'package:guarda_digital_flutter/features/after_life/presentation/tribute_content.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/assets_estate_page.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/farewell_page.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/my_wish_page.dart';
+import 'package:guarda_digital_flutter/features/after_life/presentation/tribute_page.dart';
 
 class AfterLifeContent extends StatelessWidget {
   final int selectedIndex;
@@ -16,15 +16,15 @@ class AfterLifeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (selectedIndex) {
       case 0:
-        return const AssetsEstateContent();
+        return const AssetsEstatePage();
       case 1:
-        return const TributeContent();
+        return const TributePage();
       case 2:
-        return const FarewellContent();
+        return const FarewellPage();
       case 3:
-        return const MyWishContent();
+        return const MyWishPage();
       default:
-        return const AssetsEstateContent();
+        return const AssetsEstatePage();
     }
   }
 }

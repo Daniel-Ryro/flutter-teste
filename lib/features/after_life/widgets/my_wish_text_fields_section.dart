@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../styles.dart';
 
-class TextFieldsSection extends StatelessWidget {
-  const TextFieldsSection({super.key});
+class MyWishTextFieldsSection  extends StatelessWidget {
+  const MyWishTextFieldsSection ({super.key});
 
   @override
   Widget build(BuildContext context) {

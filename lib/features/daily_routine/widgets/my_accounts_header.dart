@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/widgets/rectangle_button.dart';
+import '../../../core/widgets/generic_header.dart';
 import '../../../styles.dart';
 
 class MyAccountsHeader extends StatelessWidget {
@@ -7,9 +7,9 @@ class MyAccountsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RectangleButton(
+    return GenericHeader(
       text: 'MINHAS CONTAS',
-      color: AppColors.pink,
+      backgroundColor: AppColors.pink,
       onPressed: () {},
     );
   }

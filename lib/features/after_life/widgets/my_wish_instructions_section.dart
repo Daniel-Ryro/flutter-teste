@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../styles.dart';
 
-class InstructionsSection extends StatelessWidget {
-  const InstructionsSection({Key? key}) : super(key: key);
+class MyWishInstructionsSection extends StatelessWidget {
+  const MyWishInstructionsSection({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../core/widgets/rectangle_button.dart';
+import '../../../core/widgets/generic_header.dart';
 import '../../../styles.dart';
 
-class HeaderSection extends StatelessWidget {
-  const HeaderSection({super.key});
+class HealthHeaderSection extends StatelessWidget {
+  const HealthHeaderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return RectangleButton(
+    return GenericHeader(
       text: 'SAÚDE',
-      color: AppColors.pink,
+      backgroundColor: AppColors.pink,
       onPressed: () {},
     );
   }
