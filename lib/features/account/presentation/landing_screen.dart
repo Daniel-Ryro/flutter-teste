@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import '../../../generated/l10n.dart';
 import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 import '../widgets/login_header.dart';
 import '../widgets/notification_button.dart';
 import '../widgets/option_button.dart';
+import '../../../features/account/controllers/auth_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = GetIt.instance<AuthController>();
+
     return Scaffold(
       backgroundColor: AppColors.onbackground,
       body: SafeArea(
@@ -46,8 +50,21 @@ class LoginScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: OptionButton(
                       text: S.of(context).signIn,
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.signInScreen);
+                      onPressed: () async {
+                        // Inicia o fluxo de autenticação diretamente
+                        await authController.signIn();
+
+                        if (authController.user.value != null) {
+                          Navigator.pushNamed(context, AppRoutes.main); // Navegue para a tela principal após o login
+                        } else {
+                          // Exibe uma mensagem de erro caso o login falhe
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Falha no login, tente novamente.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       buttonColor: AppColors.primary,
                       textColor: Colors.white,

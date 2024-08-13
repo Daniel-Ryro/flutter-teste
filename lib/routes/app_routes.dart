@@ -3,7 +3,6 @@ import 'package:guarda_digital_flutter/features/main/presentation/main_screen.da
 
 import '../features/account/presentation/notify_guard_screen.dart';
 import '../features/account/presentation/landing_screen.dart';
-import '../features/account/presentation/signin_screen.dart';
 import '../features/account/presentation/signup_screen.dart';
 import '../features/daily_routine/presentation/daily_routine_screen.dart';
 import '../features/home/presentation/home_screen.dart';
@@ -28,8 +27,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
       case signUpScreen:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
-      case signInScreen:
-        return MaterialPageRoute(builder: (_) => const SignInScreen());
       case homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case vaultScreen:

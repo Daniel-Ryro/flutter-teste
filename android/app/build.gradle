@@ -28,6 +28,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        manifestPlaceholders = [
+            appAuthRedirectScheme: "msal6f93a629-c8b4-4407-9881-a69f1db2d03a",
+            applicationName: "io.flutter.app.FlutterApplication"
+        ]
     }
 
     buildTypes {

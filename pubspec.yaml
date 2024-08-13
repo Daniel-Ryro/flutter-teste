@@ -47,6 +47,7 @@ dependencies:
   mobx_codegen: ^2.6.1
   get: ^4.6.6
   flutter_secure_storage: ^4.2.1
+  flutter_appauth: ^6.0.7
 
 dev_dependencies:
   flutter_test:

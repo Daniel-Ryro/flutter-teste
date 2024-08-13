@@ -14,12 +14,29 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
-        iconPaths: [
+        iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
           'assets/icon/user_setting_ic.svg',
+        ],
+        iconActions: [
+          () {
+            // Action for notification icon
+            print("Notification icon tapped");
+            // Navigate to the notifications screen or show a notification dialog
+          },
+          () {
+            // Action for help icon
+            print("Help icon tapped");
+            // Navigate to a help page or show help content
+          },
+          () {
+            // Action for user settings icon
+            print("User settings icon tapped");
+            // Navigate to the user settings page
+          },
         ],
       ),
       body: SingleChildScrollView(

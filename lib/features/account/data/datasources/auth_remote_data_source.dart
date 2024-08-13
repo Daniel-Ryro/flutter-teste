@@ -1,40 +1,48 @@
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../domain/entities/user.dart';
 
+abstract class AuthRemoteDataSource {
+  Future<User?> signIn();
+  Future<void> signOut();
+}
 
-// import '../repositories/auth_repository.dart';
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final FlutterAppAuth appAuth;
+  final FlutterSecureStorage secureStorage;
 
-// class AuthRepositoryImpl implements AuthRepository {
-//   final MSALPublicClientApplication _msalClient;
-  
-//   AuthRepositoryImpl(this._msalClient);
+  AuthRemoteDataSourceImpl({
+    required this.appAuth,
+    required this.secureStorage,
+  });
 
-//   @override
-//   Future<User?> signIn() async {
-//     try {
-//       final result = await _msalClient.acquireTokenInteractive(
-//         ['User.Read'],
-//         authority: 'https://guardadigitalb2c.b2clogin.com/tfp/guardadigitalb2c.onmicrosoft.com/B2C_1_signin',
-//         redirectUri: 'br.com.guardadigital.authapp://oauthredirect',
-//       );
+  @override
+  Future<User?> signIn() async {
+    try {
+      final AuthorizationTokenResponse? result = await appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          'msal6f93a629-c8b4-4407-9881-a69f1db2d03a', // Insira seu clientId
+          'br.com.guardadigital.authapp://oauthredirect',
+          issuer: 'https://guardadigitalb2c.b2clogin.com/tfp/guardadigitalb2c.onmicrosoft.com/B2C_1_signin',
+          scopes: ['openid', 'profile', 'email'],
+        ),
+      );
 
-//       if (result != null) {
-//         return User(
-//           id: result.account.identifier,
-//           name: result.account.username,
-//           email: result.account.username,
-//         );
-//       }
-//     } catch (e) {
-//       print('Login failed: $e');
-//     }
-//     return null;
-//   }
+      if (result != null) {
+        return User(
+          id: result.idToken!,
+          name: result.idToken!, // Ajuste conforme necessário
+          email: result.idToken!, // Ajuste conforme necessário
+        );
+      }
+    } catch (e) {
+      print('Login failed: $e');
+    }
+    return null;
+  }
 
-//   @override
-//   Future<void> signOut() async {
-//     try {
-//       await _msalClient.signOut();
-//     } catch (e) {
-//       print('Logout failed: $e');
-//     }
-//   }
-// }
+  @override
+  Future<void> signOut() async {
+    // Implemente a lógica de sign out, se necessário
+  }
+}
