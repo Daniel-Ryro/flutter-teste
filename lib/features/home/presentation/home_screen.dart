@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/widgets/custom_app_bar.dart';
+import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 import '../widgets/conference_section.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
@@ -33,7 +34,7 @@ class HomeScreen extends StatelessWidget {
           },
           () {
             // Action for user settings icon
-            print("User settings icon tapped");
+            Navigator.pushNamed(context, AppRoutes.userSettings);
             // Navigate to the user settings page
           },
         ],
