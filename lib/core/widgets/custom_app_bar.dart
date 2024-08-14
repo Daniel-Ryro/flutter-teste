@@ -4,17 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? leftIconPath;
   final List<String> iconPaths;
   final List<VoidCallback?> iconActions;
-  final double leftIconSize;
 
   const CustomAppBar({
     super.key,
-    this.leftIconPath,
     this.iconPaths = const [],
     this.iconActions = const [],
-    this.leftIconSize = 32.0,
   });
 
   @override
@@ -22,19 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: AppColors.background,
       elevation: 0,
-      leading: leftIconPath != null
-          ? Padding(
-              padding: EdgeInsets.only(left: 16.w),
-              child: SizedBox(
-                width: leftIconSize.w,
-                height: leftIconSize.h,
-                child: SvgPicture.asset(
-                  leftIconPath!,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            )
-          : null,
+      leading: null, // Remove o ícone de "arrow back" e a logo à esquerda
+      automaticallyImplyLeading: false, // Garante que nenhum ícone padrão será exibido
       actions: _buildAppBarIcons(),
     );
   }

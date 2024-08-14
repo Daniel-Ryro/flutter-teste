@@ -4,12 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TextInputField extends StatelessWidget {
   final String labelText;
   final bool isObscure;
+  final ValueChanged<String>? onChanged;  
 
   const TextInputField({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.isObscure,
-  }) : super(key: key);
+    this.onChanged,  
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class TextInputField extends StatelessWidget {
             border: const OutlineInputBorder(),
           ),
           obscureText: isObscure,
+          onChanged: onChanged,  // Passando o onChanged para o TextField
         ),
       ],
     );

@@ -23,7 +23,6 @@ class _VaultScreenState extends State<VaultScreen> {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
       appBar: const CustomAppBar(
-        leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
         iconPaths: [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',

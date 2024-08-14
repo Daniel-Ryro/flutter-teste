@@ -15,7 +15,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
       appBar: CustomAppBar(
-        leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
         iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',

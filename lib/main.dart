@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart'; // Importante para usar o GetX
 import 'package:guarda_digital_flutter/features/main/presentation/main_screen.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:guarda_digital_flutter/features/account/controllers/auth_controller.dart'; // Importante para a injeção do controlador
 
 void main() {
-  setupInjection();
+  setupInjection(); // Configurando a injeção de dependências
   runApp(const MyApp());
 }
 
@@ -21,10 +22,13 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       builder: (context, child) {
-        return MaterialApp(
+        return GetMaterialApp(
           title: 'Guarda Digital',
           initialRoute: AppRoutes.main,
           onGenerateRoute: AppRoutes.generateRoute,
+          initialBinding: BindingsBuilder(() {
+            Get.lazyPut<AuthController>(() => sl<AuthController>());
+          }),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,

@@ -1,45 +1,53 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../data/repositories/auth_repository.dart';
-import '../domain/entities/user.dart';
+import 'package:guarda_digital_flutter/features/account/domain/entities/user.dart';
+import '../data/models/user_model.dart';
+import '../domain/usecases/login_use_case.dart';
+import '../domain/usecases/sign_up_use_case.dart';
 
 class AuthController extends GetxController {
-  final AuthRepository _authRepository;
+  final LoginUseCase loginUseCase;
+  final SignUpUseCase signUpUseCase;
 
-  // Adicionando TextEditingControllers para email e senha
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  var email = ''.obs;
+  var password = ''.obs;
+  var isLoading = false.obs;
 
-  var user = Rx<User?>(null);
-  var errorMessage = Rx<String?>(null);
+  AuthController({
+    required this.loginUseCase,
+    required this.signUpUseCase,
+  });
 
-  AuthController(this._authRepository);
-
-  Future<void> signIn() async {
+  void login() async {
+    isLoading.value = true;
     try {
-      // Aqui você pode usar emailController.text e passwordController.text
-      user.value = await _authRepository.signIn();
-
-      if (user.value == null) {
-        errorMessage.value = 'Falha no login';
-      } else {
-        errorMessage.value = null;
-      }
+      final User user = await loginUseCase();
+      print('Login realizado com sucesso:');
+      print('ID Token: ${user.idToken}');
+      print('Access Token: ${user.accessToken}');
+      print('Refresh Token: ${user.refreshToken}');
+      // Aqui você pode armazenar os tokens de forma segura se necessário
     } catch (e) {
-      errorMessage.value = 'Erro durante o login: $e';
+      print('Erro ao fazer login: $e'); // Mensagem de erro
+      // Trate o erro de autenticação
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  Future<void> signOut() async {
-    await _authRepository.signOut();
-    user.value = null;
-  }
-
-  @override
-  void dispose() {
-    // Certifique-se de descartar os controladores ao descartar o controller
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  void signUp() async {
+    isLoading.value = true;
+    try {
+      final User user = await signUpUseCase();
+      print('Conta criada com sucesso:');
+      print('ID Token: ${user.idToken}');
+      print('Access Token: ${user.accessToken}');
+      print('Refresh Token: ${user.refreshToken}');
+      // Aqui você pode navegar para outra tela ou manipular o resultado da criação de conta
+    } catch (e) {
+      print('Erro ao criar conta: $e'); // Mensagem de erro
+      // Trate o erro de criação de conta
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

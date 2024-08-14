@@ -26,7 +26,6 @@ class _PetsScreenState extends State<PetsScreen> {
       child: Scaffold(
         backgroundColor: AppColors.onbackground,
         appBar: const CustomAppBar(
-          leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
           iconPaths: [
             'assets/icon/notification_ic.svg',
             'assets/icon/help_ic.svg',

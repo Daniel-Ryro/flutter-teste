@@ -22,18 +22,21 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case login:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
+        return MaterialPageRoute(builder: (_) => const LandingScreen());
       case loginExecute:
         return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
       case signUpScreen:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+        return MaterialPageRoute(builder: (_) => SignUpScreen());
       case homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case vaultScreen:
         return MaterialPageRoute(builder: (_) => const VaultScreen());
+
       case dailyRoutine:
         return MaterialPageRoute(builder: (_) => const DailyRoutineScreen());
       case main:
+        return MaterialPageRoute(builder: (_) => const MainScreen());
+      case userSettings:
         return MaterialPageRoute(builder: (_) => const MainScreen());
 
       default:

@@ -24,7 +24,6 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
       appBar: const CustomAppBar(
-        leftIconPath: 'assets/icon/loco_horizontal_ic.svg',
         iconPaths: [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
@@ -60,7 +59,7 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
   Widget _buildContent() {
     switch (_selectedTabIndex) {
       case 0:
-        return const HealthTabContent(); 
+        return const HealthTabContent();
       case 1:
         return const MyDocumentsTabContent();
       case 2:
