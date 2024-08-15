@@ -9,41 +9,44 @@ import '../../features/account/data/repositories/auth_repository_impl.dart';
 import '../../features/account/domain/repositories/auth_repository.dart';
 import '../../features/account/domain/usecases/login_use_case.dart';
 import '../../features/account/domain/usecases/sign_up_use_case.dart';
-import '../network/dio_client.dart';
 
+// Instância global do GetIt para gerenciamento de injeção de dependências
 final sl = GetIt.instance;
 
+// Função para configurar a injeção de dependências
 void setupInjection() {
   // Certifique-se de registrar o Dio apenas uma vez
   if (!GetIt.instance.isRegistered<Dio>()) {
-    setupDioClient();
+    setupDioClient(); // Configura o DioClient
   }
 
-  // External dependencies
-  sl.registerLazySingleton(() => const FlutterSecureStorage());
-  sl.registerLazySingleton(() => FlutterAppAuth());
+  // Dependências externas
+  sl.registerLazySingleton(() => const FlutterSecureStorage()); // Armazenamento seguro para senhas e tokens
+  sl.registerLazySingleton(() => FlutterAppAuth()); // Autenticação com OAuth2/OpenID
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(
-        appAuth: sl<FlutterAppAuth>(),
+        appAuth: sl<FlutterAppAuth>(), // DataSource remoto de autenticação
       ));
+
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-        remoteDataSource: sl<AuthRemoteDataSource>(),
+        remoteDataSource: sl<AuthRemoteDataSource>(), // Implementação do repositório de autenticação
       ));
 
   // Use cases
-  sl.registerLazySingleton(() => LoginUseCase(sl<AuthRepository>()));
-  sl.registerLazySingleton(() => SignUpUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => LoginUseCase(sl<AuthRepository>())); // Caso de uso para login
+  sl.registerLazySingleton(() => SignUpUseCase(sl<AuthRepository>())); // Caso de uso para cadastro
 
   // Controllers
   sl.registerLazySingleton(() => AuthController(
-        loginUseCase: sl<LoginUseCase>(),
-        signUpUseCase: sl<SignUpUseCase>(),
+        loginUseCase: sl<LoginUseCase>(), // Controller para lidar com login
+        signUpUseCase: sl<SignUpUseCase>(), // Controller para lidar com cadastro
       ));
 }
 
+// Função para configurar e registrar o Dio como cliente HTTP
 void setupDioClient() {
-  final dio = Dio();
-  sl.registerLazySingleton(() => dio);
+  final dio = Dio(); // Instancia o Dio
+  sl.registerLazySingleton(() => dio); // Registra o Dio como singleton
 }
