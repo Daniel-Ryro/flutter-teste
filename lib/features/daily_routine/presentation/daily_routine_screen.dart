@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
+import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 import '../widgets/health_tab_content.dart';
 import '../widgets/my_accounts_tab_content.dart';
@@ -23,11 +24,22 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
-      appBar: const CustomAppBar(
-        iconPaths: [
+      appBar: CustomAppBar(
+        iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
           'assets/icon/user_setting_ic.svg',
+        ],
+        iconActions: [
+          () {
+            Navigator.pushNamed(context, AppRoutes.notificationScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.helpScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.userSettings);
+          },
         ],
       ),
       body: SingleChildScrollView(

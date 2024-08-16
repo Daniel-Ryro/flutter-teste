@@ -4,6 +4,7 @@ import 'package:guarda_digital_flutter/features/after_life/widgets/title_section
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
+import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 import '../widgets/scheduling_tab_content.dart';
 import '../widgets/pet_card.dart';
@@ -25,11 +26,24 @@ class _PetsScreenState extends State<PetsScreen> {
       length: 2,
       child: Scaffold(
         backgroundColor: AppColors.onbackground,
-        appBar: const CustomAppBar(
-          iconPaths: [
+        appBar: CustomAppBar(
+          iconPaths: const [
             'assets/icon/notification_ic.svg',
             'assets/icon/help_ic.svg',
             'assets/icon/user_setting_ic.svg',
+          ],
+          iconActions: [
+            () {
+              Navigator.pushNamed(context, AppRoutes.notificationScreen);
+            },
+            () {
+              Navigator.pushNamed(context, AppRoutes.helpScreen);
+            },
+            () {
+              // Action for user settings icon
+              Navigator.pushNamed(context, AppRoutes.userSettings);
+              // Navigate to the user settings page
+            },
           ],
         ),
         body: SingleChildScrollView(

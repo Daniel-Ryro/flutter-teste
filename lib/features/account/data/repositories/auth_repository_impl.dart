@@ -1,32 +1,57 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart'; 
 import '../datasources/auth_remote_data_source.dart'; 
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
+  final FlutterSecureStorage secureStorage;
 
-  // O construtor da classe recebe uma instância de AuthRemoteDataSource.
-  // Isso segue o princípio da Inversão de Dependências, facilitando o teste e a troca de implementações.
-  AuthRepositoryImpl({required this.remoteDataSource});
+  // Construtor da classe que recebe as dependências necessárias.
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+    required this.secureStorage,
+  });
 
-  // Implementação do método de login definido na interface AuthRepository.
-  // Este método delega a responsabilidade de autenticação ao data source remoto.
+  // Método para realizar o login do usuário.
   @override
   Future<User> login() async {
-    return await remoteDataSource.login(); // Chama o método login() no data source remoto e retorna o resultado.
+    final user = await remoteDataSource.login();
+
+    // Salva os tokens de forma segura após o login bem-sucedido.
+    await secureStorage.write(key: 'idToken', value: user.idToken);
+    await secureStorage.write(key: 'accessToken', value: user.accessToken);
+    await secureStorage.write(key: 'refreshToken', value: user.refreshToken);
+
+    return user;
   }
 
-  // Implementação do método de cadastro (sign up) definido na interface AuthRepository.
-  // Assim como o login, a responsabilidade é delegada ao data source remoto.
+  // Método para realizar o cadastro do usuário.
   @override
   Future<User> signUp() async {
-    return await remoteDataSource.signUp(); // Chama o método signUp() no data source remoto e retorna o resultado.
+    final user = await remoteDataSource.signUp();
+
+    // Salva os tokens de forma segura após o signUp bem-sucedido.
+    await secureStorage.write(key: 'idToken', value: user.idToken);
+    await secureStorage.write(key: 'accessToken', value: user.accessToken);
+    await secureStorage.write(key: 'refreshToken', value: user.refreshToken);
+
+    return user;
   }
 
-  // Implementação do método de logout definido na interface AuthRepository.
-  // Este método apenas delega a responsabilidade de logout ao data source remoto.
+  // Método para realizar o logout do usuário.
   @override
   Future<void> logout() async {
-    await remoteDataSource.logout(); // Chama o método logout() no data source remoto.
+    final idToken = await secureStorage.read(key: 'idToken');
+    if (idToken != null) {
+      await remoteDataSource.logout(idToken);
+
+      // Remove os tokens após o logout.
+      await secureStorage.delete(key: 'idToken');
+      await secureStorage.delete(key: 'accessToken');
+      await secureStorage.delete(key: 'refreshToken');
+    } else {
+      throw Exception('Logout falhou: idToken não disponível.');
+    }
   }
 }

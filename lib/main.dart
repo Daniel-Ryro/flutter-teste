@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart'; 
-import 'package:guarda_digital_flutter/features/main/presentation/main_screen.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           title: 'Guarda Digital',
-          initialRoute: AppRoutes.main,
+          initialRoute: AppRoutes.login,
           onGenerateRoute: AppRoutes.generateRoute,
           initialBinding: BindingsBuilder(() {
             Get.lazyPut<AuthController>(() => sl<AuthController>());

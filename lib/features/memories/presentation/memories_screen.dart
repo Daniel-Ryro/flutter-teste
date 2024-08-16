@@ -5,6 +5,7 @@ import 'package:guarda_digital_flutter/features/memories/presentation/my_files_t
 import 'package:guarda_digital_flutter/features/memories/presentation/time_capsule_tab_content.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
+import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 
 class MemoriesScreen extends StatefulWidget {
@@ -21,11 +22,24 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
-      appBar: const CustomAppBar(
-        iconPaths: [
+      appBar: CustomAppBar(
+        iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
           'assets/icon/user_setting_ic.svg',
+        ],
+        iconActions: [
+          () {
+            Navigator.pushNamed(context, AppRoutes.notificationScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.helpScreen);
+          },
+          () {
+            // Action for user settings icon
+            Navigator.pushNamed(context, AppRoutes.userSettings);
+            // Navigate to the user settings page
+          },
         ],
       ),
       body: SingleChildScrollView(
@@ -60,7 +74,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
         return const MemoryBookTabContent();
       case 1:
         return const MyFilesTabContent();
-     case 2:
+      case 2:
         return const TimeCapsuleTabContent();
       default:
         return const MemoryBookTabContent();

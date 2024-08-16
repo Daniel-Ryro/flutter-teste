@@ -5,7 +5,9 @@ import '../features/account/presentation/notify_guard_screen.dart';
 import '../features/account/presentation/landing_screen.dart';
 import '../features/account/presentation/signup_screen.dart';
 import '../features/daily_routine/presentation/daily_routine_screen.dart';
+import '../features/help/presentation/help_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/notification/presentation/notification_screen.dart';
 import '../features/user_settings.dart/presentation/user_setting_screen.dart';
 import '../features/user_settings.dart/presentation/zip_code_screen.dart';
 import '../features/vault/presentation/vault_screen.dart';
@@ -21,6 +23,8 @@ class AppRoutes {
   static const String dailyRoutine = '/dailyRoutineScreen';
   static const String userSettings = '/userSettingsScreen';
   static const String zipCode = '/zipCodeScreen';
+  static const String helpScreen = '/helpScreen';
+  static const String notificationScreen = '/notificationScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -42,8 +46,11 @@ class AppRoutes {
       case userSettings:
         return MaterialPageRoute(builder: (_) => const UserSettingsScreen());
       case zipCode:
-        return MaterialPageRoute(builder: (_) => const ZipCodeScreen());  
-
+        return MaterialPageRoute(builder: (_) => const ZipCodeScreen());
+      case helpScreen:
+        return MaterialPageRoute(builder: (_) => const HelpSettingsScreen());
+      case notificationScreen:
+        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

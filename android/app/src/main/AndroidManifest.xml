@@ -1,11 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="guarda_digital_flutter"
         android:icon="@mipmap/ic_launcher">
         
-
-        <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,28 +24,22 @@
             </intent-filter>
         </activity>
 
-        <!-- RedirectUriReceiverActivity para lidar com o redirecionamento da autenticação -->
         <activity
             android:name="com.linusu.flutter_appauth.RedirectUriReceiverActivity"
             android:exported="true">
             <intent-filter android:label="flutter_appauth">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Esquema de URI de redirecionamento personalizado -->
-                <data android:scheme="msal6f93a629-c8b4-4407-9881-a69f1db2d03a" />
+                <data android:scheme="${appAuthRedirectScheme}" android:host="oauth" android:path="/redirect" />
             </intent-filter>
         </activity>
 
-        <!-- Meta-dados para o Flutter -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
 
-    <!-- Permissão para consultar atividades que podem processar texto -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

@@ -5,19 +5,16 @@ import '../../../core/widgets/custom_bottom_navigation_bar.dart';
 import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
 import '../../main/presentation/main_screen.dart';
-import '../widgets/my_infos_tab/user_settings_content.dart';
-import '../widgets/my_infos_tab/user_settings_tab_bar.dart';
+import '../widget/help_option_card.dart';
 
-class UserSettingsScreen extends StatefulWidget {
-  const UserSettingsScreen({super.key});
+class HelpSettingsScreen extends StatefulWidget {
+  const HelpSettingsScreen({super.key});
 
   @override
-  _UserSettingsScreenState createState() => _UserSettingsScreenState();
+  _HelpSettingsScreenState createState() => _HelpSettingsScreenState();
 }
 
-class _UserSettingsScreenState extends State<UserSettingsScreen> {
-  int _selectedTabIndex = 0;
-
+class _HelpSettingsScreenState extends State<HelpSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,17 +49,37 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: 10.h),
-                    UserSettingsTabBar(
-                      selectedIndex: _selectedTabIndex,
-                      onTabSelected: (index) {
-                        setState(() {
-                          _selectedTabIndex = index;
-                        });
-                      },
+                    Text(
+                      'Central de Ajuda',
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                    Expanded(
-                      child:
-                          UserSettingsContent(selectedIndex: _selectedTabIndex),
+                    SizedBox(height: 8.h),
+                    Text(
+                      'Como agente pode te ajudar hoje ?',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
+                    HelpOptionCard(
+                      icon: Icons.help_outline,
+                      title: 'Dúvidas Frequentes',
+                      description:
+                          'Veja perguntas frequentes sobre nossos serviços',
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 20.h),
+                    HelpOptionCard(
+                      icon: Icons.more_sharp,
+                      title: 'Fala com nossos Atendentes',
+                      description:
+                          'Compartilhe suas memorias e lembranças organizadas de uma maneira fácil',
+                      onTap: () {},
                     ),
                   ],
                 ),
@@ -77,7 +94,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => MainScreen(),
+                builder: (context) => const MainScreen(),
                 settings: RouteSettings(arguments: index)),
             (Route<dynamic> route) => false,
           );

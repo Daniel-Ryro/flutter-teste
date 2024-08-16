@@ -6,7 +6,7 @@ import '../models/user_model.dart';
 abstract class AuthRemoteDataSource {
   Future<UserModel> login();  // Método para realizar o login
   Future<UserModel> signUp(); // Método para realizar o cadastro
-  Future<void> logout();      // Método para realizar o logout
+  Future<void> logout(String idToken); // Método para realizar o logout, agora requer o idToken
 }
 
 // Implementação concreta do AuthRemoteDataSource
@@ -21,20 +21,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   // Método para realizar o login do usuário
   @override
   Future<UserModel> login() async {
-    // Cria uma requisição de autorização e troca de token
     final AuthorizationTokenRequest request = AuthorizationTokenRequest(
       ApiConstants.clientId,          // ID do cliente para o OAuth
       ApiConstants.redirectUri,       // URI de redirecionamento configurada para o cliente
       issuer: ApiConstants.issuer,    // Emissor (Issuer) do OAuth
       scopes: ApiConstants.scopes,    // Escopos de autorização solicitados (ex.: profile, email)
+      promptValues: ['login'],        // Garante que sempre exiba a tela de login
     );
 
     try {
-      // Tenta autorizar e trocar o código de autorização pelo token de acesso
       final AuthorizationTokenResponse? result =
           await _appAuth.authorizeAndExchangeCode(request);
 
-      // Se a resposta for não nula, cria e retorna um UserModel com os tokens recebidos
       if (result != null) {
         return UserModel(
           idToken: result.idToken!,           // Token de identidade (JWT)
@@ -42,11 +40,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           refreshToken: result.refreshToken!, // Token de atualização
         );
       } else {
-        // Se não houver resultado, lança uma exceção
         throw Exception('Login falhou: Nenhum resultado retornado.');
       }
     } catch (e) {
-      // Captura e lança qualquer exceção ocorrida durante o processo de login
       throw Exception('Erro ao fazer login: $e');
     }
   }
@@ -54,15 +50,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   // Método para realizar o cadastro do usuário
   @override
   Future<UserModel> signUp() async {
-    // Em muitos casos, o fluxo de cadastro e login é o mesmo.
-    // Portanto, este método simplesmente reutiliza o método de login.
-    return login();
+    return login(); // Reutiliza o método de login, conforme o fluxo de autenticação.
   }
 
   // Método para realizar o logout do usuário
   @override
-  Future<void> logout() async {
-    // Implementação do logout se necessário.
-    // Por exemplo, limpar tokens armazenados ou revogar o token de acesso.
+  Future<void> logout(String idToken) async {
+    try {
+      final EndSessionRequest request = EndSessionRequest(
+        idTokenHint: idToken,                    // Token de ID do usuário para encerrar a sessão
+        postLogoutRedirectUrl: ApiConstants.redirectUri,
+        issuer: ApiConstants.issuer,
+      );
+
+      await _appAuth.endSession(request);
+    } catch (e) {
+      throw Exception('Erro ao fazer logout: $e');
+    }
   }
 }

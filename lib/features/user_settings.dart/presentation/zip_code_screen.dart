@@ -22,14 +22,10 @@ class ZipCodeScreen extends StatelessWidget {
         ],
         iconActions: [
           () {
-            // Action for notification icon
-            print("Notification icon tapped");
-            // Navigate to the notifications screen or show a notification dialog
+            Navigator.pushNamed(context, AppRoutes.notificationScreen);
           },
           () {
-            // Action for help icon
-            print("Help icon tapped");
-            // Navigate to a help page or show help content
+            Navigator.pushNamed(context, AppRoutes.helpScreen);
           },
           () {
             // Action for user settings icon

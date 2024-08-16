@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:guarda_digital_flutter/features/account/domain/entities/user.dart';
+import '../../main/presentation/main_screen.dart';
 import '../domain/usecases/login_use_case.dart';
 import '../domain/usecases/sign_up_use_case.dart';
 
@@ -28,7 +29,9 @@ class AuthController extends GetxController {
       print('ID Token: ${user.idToken}');
       print('Access Token: ${user.accessToken}');
       print('Refresh Token: ${user.refreshToken}');
-      // Aqui você pode armazenar os tokens de forma segura se necessário
+      
+      // Redireciona o usuário para a tela principal após o login
+      Get.offAll(() => MainScreen()); // Navega para a MainScreen e remove todas as rotas anteriores da pilha
     } catch (e) {
       print('Erro ao fazer login: $e'); // Imprime uma mensagem de erro em caso de falha
       // Trate o erro de autenticação (ex.: exibir mensagem de erro ao usuário)
@@ -46,7 +49,9 @@ class AuthController extends GetxController {
       print('ID Token: ${user.idToken}');
       print('Access Token: ${user.accessToken}');
       print('Refresh Token: ${user.refreshToken}');
+      
       // Aqui você pode navegar para outra tela ou manipular o resultado da criação de conta
+      Get.offAll(() => MainScreen()); // Opcionalmente, redireciona para a MainScreen após o cadastro
     } catch (e) {
       print('Erro ao criar conta: $e'); // Imprime uma mensagem de erro em caso de falha
       // Trate o erro de criação de conta (ex.: exibir mensagem de erro ao usuário)

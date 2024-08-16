@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../../styles.dart'; 
+import '../../../routes/app_routes.dart';
+import '../../../styles.dart';
 import '../widgets/after_life_content.dart';
 import '../widgets/after_life_tab_bar.dart';
 
@@ -18,13 +19,24 @@ class _AfterLifeScreenState extends State<AfterLifeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.onbackground, // Define a cor de fundo da tela
-      appBar: const CustomAppBar(
-        iconPaths: [
+      backgroundColor: AppColors.onbackground,
+      appBar: CustomAppBar(
+        iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
           'assets/icon/user_setting_ic.svg',
-        ], // Ícones que aparecerão no AppBar
+        ],
+        iconActions: [
+          () {
+            Navigator.pushNamed(context, AppRoutes.notificationScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.helpScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.userSettings);
+          },
+        ],
       ),
       body: Column(
         children: [

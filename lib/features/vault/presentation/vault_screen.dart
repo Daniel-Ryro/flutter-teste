@@ -7,6 +7,7 @@ import 'package:guarda_digital_flutter/features/vault/presentation/executors_con
 
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
+import '../../../routes/app_routes.dart';
 
 class VaultScreen extends StatefulWidget {
   const VaultScreen({super.key});
@@ -22,11 +23,24 @@ class _VaultScreenState extends State<VaultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.onbackground,
-      appBar: const CustomAppBar(
-        iconPaths: [
+      appBar: CustomAppBar(
+        iconPaths: const [
           'assets/icon/notification_ic.svg',
           'assets/icon/help_ic.svg',
           'assets/icon/user_setting_ic.svg',
+        ],
+        iconActions: [
+          () {
+            Navigator.pushNamed(context, AppRoutes.notificationScreen);
+          },
+          () {
+            Navigator.pushNamed(context, AppRoutes.helpScreen);
+          },
+          () {
+            // Action for user settings icon
+            Navigator.pushNamed(context, AppRoutes.userSettings);
+            // Navigate to the user settings page
+          },
         ],
       ),
       body: SingleChildScrollView(

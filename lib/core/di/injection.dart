@@ -15,10 +15,8 @@ final sl = GetIt.instance;
 
 // Função para configurar a injeção de dependências
 void setupInjection() {
-  // Certifique-se de registrar o Dio apenas uma vez
-  if (!GetIt.instance.isRegistered<Dio>()) {
-    setupDioClient(); // Configura o DioClient
-  }
+  // Configura o DioClient
+  setupDioClient();
 
   // Dependências externas
   sl.registerLazySingleton(() => const FlutterSecureStorage()); // Armazenamento seguro para senhas e tokens
@@ -32,6 +30,7 @@ void setupInjection() {
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
         remoteDataSource: sl<AuthRemoteDataSource>(), // Implementação do repositório de autenticação
+        secureStorage: sl<FlutterSecureStorage>(), // Passa o FlutterSecureStorage para o repositório
       ));
 
   // Use cases
