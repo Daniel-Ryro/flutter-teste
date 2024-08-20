@@ -3,12 +3,12 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../features/account/controllers/auth_controller.dart';
-import '../../features/account/data/datasources/auth_remote_data_source.dart';
-import '../../features/account/data/repositories/auth_repository_impl.dart';
-import '../../features/account/domain/repositories/auth_repository.dart';
-import '../../features/account/domain/usecases/login_use_case.dart';
-import '../../features/account/domain/usecases/sign_up_use_case.dart';
+import '../../features/login/controllers/auth_controller.dart';
+import '../../features/login/data/datasources/auth_remote_data_source.dart';
+import '../../features/login/data/repositories/auth_repository_impl.dart';
+import '../../features/login/domain/repositories/auth_repository.dart';
+import '../../features/login/domain/usecases/login_use_case.dart';
+import '../../features/login/domain/usecases/sign_up_use_case.dart';
 
 // Instância global do GetIt para gerenciamento de injeção de dependências
 final sl = GetIt.instance;

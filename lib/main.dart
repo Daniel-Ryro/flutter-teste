@@ -5,7 +5,7 @@ import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:guarda_digital_flutter/features/account/controllers/auth_controller.dart'; 
+import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart'; 
 
 void main() {
   setupInjection(); 

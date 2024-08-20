@@ -68,4 +68,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw Exception('Erro ao fazer logout: $e');
     }
   }
+
+  
 }

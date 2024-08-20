@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class VaultSection extends StatelessWidget {
   final String title;
   final String description;
-  final String? svgPath; // Changed to nullable type
+  final String? svgPath;
   final Widget? actionWidget;
   final Color? backgroundColor;
   final Color? iconColor;
@@ -17,8 +17,9 @@ class VaultSection extends StatelessWidget {
 
   const VaultSection({
     super.key,
-    required this.title,
-    required this.description,
+    this.title = "Meu Cofre",
+    this.description =
+        "O resumo de todas as suas informações ficam guardadas no cofre de forma segura e acesso fácil",
     this.svgPath,
     this.actionWidget,
     this.backgroundColor,
@@ -34,58 +35,63 @@ class VaultSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
-      height: height,
+      height: height ?? 300.h,
       padding: EdgeInsets.all(12.w),
       margin: EdgeInsets.symmetric(vertical: 8.h),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 3,
-            blurRadius: 5,
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (svgPath != null) ...[
                 SvgPicture.asset(
                   svgPath!,
-                  width: 24.w,
-                  height: 24.h,
-                  color: iconColor ?? Colors.purple,
+                  width: 40.w,
+                  height: 40.h,
+                  color: iconColor ?? const Color(0xFF8E44AD),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 16.w),
               ],
-              Flexible(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: titleFontSize ?? 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: textColor ?? Colors.black,
-                  ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: titleFontSize ?? 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: textColor ?? Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: descriptionFontSize ?? 16.sp,
+                        color: textColor ?? Colors.grey[600],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            description,
-            style: TextStyle(
-              fontSize: descriptionFontSize ?? 14.sp,
-              color: textColor ?? Colors.grey[600],
-            ),
           ),
           if (actionWidget != null) ...[
             SizedBox(height: 8.h),
             actionWidget!,
           ],
+          const Spacer(), // Empurra a imagem para o final do container
+          Container(
+            margin: EdgeInsets.only(top: 8.h),
+            child: Image.asset(
+              'assets/img/parents-with-their-children-walking-forest 1.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 100.h, // Ajuste a altura conforme necessário
+            ),
+          ),
         ],
       ),
     );
