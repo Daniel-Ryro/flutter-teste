@@ -1,6 +1,6 @@
 
 
-import '../entities/user.dart';
+import '../entities/token.dart';
 import '../repositories/auth_repository.dart';
 
 class SignUpUseCase {

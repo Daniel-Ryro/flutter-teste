@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 
-import '../../../../core/widgets/action_button_widget.dart';
-import '../../presentation/welcome_screen.dart';
+import '../../../core/widgets/action_button_widget.dart';
+import 'welcome_screen.dart';
 
 class ActionButtons extends StatelessWidget {
   const ActionButtons({super.key});

@@ -1,5 +1,5 @@
 
-import '../entities/user.dart';
+import '../entities/token.dart';
 
 abstract class AuthRepository {
   Future<User> login();

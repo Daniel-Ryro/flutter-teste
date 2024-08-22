@@ -45,7 +45,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
               widget.onPageFinished?.call(url);
 
               // Redireciona para outra tela após a autenticação bem-sucedida
-              Get.offAllNamed('/main');
+              Get.offAllNamed('/welcomeScreen');
             }
           }
         },

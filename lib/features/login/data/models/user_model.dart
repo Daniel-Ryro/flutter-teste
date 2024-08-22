@@ -1,5 +1,5 @@
 
-import '../../domain/entities/user.dart';
+import '../../domain/entities/token.dart';
 
 class UserModel extends User {
   final String? idToken;

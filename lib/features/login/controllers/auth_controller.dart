@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:guarda_digital_flutter/features/login/domain/entities/user.dart';
+import 'package:guarda_digital_flutter/features/login/domain/entities/token.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../main/presentation/main_screen.dart';
 import '../domain/usecases/login_use_case.dart';
 import '../domain/usecases/sign_up_use_case.dart';
 import '../presentation/webview.dart';
-import '../presentation/welcome_screen.dart';
+import '../../account/presentation/welcome_screen.dart';
 
 class AuthController extends GetxController {
   final LoginUseCase loginUseCase;
@@ -46,7 +46,7 @@ class AuthController extends GetxController {
                   key: 'refreshToken', value: refreshToken);
 
               // Navega para a tela principal
-              Get.offAll(() => WelcomeScreen());
+              Get.offAll(() => const MainScreen());
             } else {
               // Trate o caso em que os tokens não foram capturados
               print('Erro: Tokens não foram encontrados na URL.');

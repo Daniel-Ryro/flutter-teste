@@ -4,7 +4,7 @@ import 'package:guarda_digital_flutter/features/main/presentation/main_screen.da
 import '../features/login/presentation/notify_guard_screen.dart';
 import '../features/login/presentation/landing_screen.dart';
 import '../features/login/presentation/signup_screen.dart';
-import '../features/login/presentation/welcome_screen.dart';
+import '../features/account/presentation/welcome_screen.dart';
 import '../features/daily_routine/presentation/daily_routine_screen.dart';
 import '../features/help/presentation/help_screen.dart';
 import '../features/home/presentation/home_screen.dart';
@@ -53,8 +53,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HelpSettingsScreen());
       case notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
-      case welcomeScreen:
-        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
