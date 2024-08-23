@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart'; 
+import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart';
 
-void main() {
-  setupInjection(); 
+void main() async {
+  setupInjection();
+  await dotenv.load();
+
   runApp(const MyApp());
 }
 
