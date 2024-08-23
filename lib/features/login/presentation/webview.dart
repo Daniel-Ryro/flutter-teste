@@ -35,17 +35,20 @@ class _WebViewScreenState extends State<WebViewScreen> {
             final String? code = uri.queryParameters['code'];
 
             if (code != null) {
-              // Armazene o código ou use-o para obter tokens de acesso
-              await secureStorage.write(key: 'auth_code', value: code);
+              // Aqui você faria uma troca de código por um token de acesso (exemplo)
+              // String accessToken = await exchangeCodeForAccessToken(code);
+
+              // Por enquanto, vou armazenar diretamente como um token de acesso
+              await secureStorage.write(key: 'accessToken', value: code);
 
               // Imprime o token no console
-              print('Auth Code: $code');
+              print('Access Token: $code');
 
               // Chame o callback passado se existir
               widget.onPageFinished?.call(url);
 
               // Redireciona para outra tela após a autenticação bem-sucedida
-              Get.offAllNamed('/welcomeScreen');
+              Get.offAllNamed('/main');
             }
           }
         },

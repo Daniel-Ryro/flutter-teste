@@ -5,7 +5,6 @@ import '../../main/presentation/main_screen.dart';
 import '../domain/usecases/login_use_case.dart';
 import '../domain/usecases/sign_up_use_case.dart';
 import '../presentation/webview.dart';
-import '../../account/presentation/welcome_screen.dart';
 
 class AuthController extends GetxController {
   final LoginUseCase loginUseCase;

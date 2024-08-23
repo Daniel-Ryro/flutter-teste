@@ -15,8 +15,20 @@ class AccountRepositoryImpl implements AccountRepository {
     try {
       final remoteUser = await remoteDataSource.getAccountData();
       return Right(remoteUser);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
+    } on ServerException catch (e, stackTrace) {
+      // Aqui capturamos detalhes adicionais do erro
+      final errorMessage = e.message ?? "Erro desconhecido no servidor";
+
+      print("Erro ao obter dados da conta: $errorMessage");
+      print("Stack trace: $stackTrace");
+
+      return Left(ServerFailure(errorMessage));
+    } catch (e, stackTrace) {
+      // Captura outros tipos de exceções que possam ocorrer
+      print("Erro inesperado ao obter dados da conta: $e");
+      print("Stack trace: $stackTrace");
+
+      return Left(ServerFailure("Erro inesperado: ${e.toString()}"));
     }
   }
 }
