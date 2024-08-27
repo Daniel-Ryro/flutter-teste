@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
@@ -9,14 +10,42 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart';
 
 void main() async {
-  setupInjection();
+  // Ensure Flutter's bindings are initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables before any dependency injection
   await dotenv.load();
 
-  runApp(const MyApp());
-}
+  // Set up dependency injection
+  setupInjection();
 
+  // Inicializa o FlutterSecureStorage
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  // Verifica se o usuário está logado
+  String? accessToken = await secureStorage.read(key: 'accessToken');
+  String initialRoute = AppRoutes.login;
+
+  if (accessToken != null) {
+    // Valida o token, ou tenta renová-lo
+    try {
+      // (opcional) Verifique se o token ainda é válido antes de usá-lo
+      // Caso não seja, você pode tentar renovar o token aqui
+
+      initialRoute = AppRoutes.main; // Defina a rota principal
+    } catch (e) {
+      print("Erro ao verificar ou renovar o token: $e");
+      // Se falhar, permaneça na tela de login
+    }
+  }
+
+  // Run the app
+  runApp(MyApp(initialRoute: initialRoute));
+}
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +55,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           title: 'Guarda Digital',
-          initialRoute: AppRoutes.login,
+          initialRoute: initialRoute,
           onGenerateRoute: AppRoutes.generateRoute,
           initialBinding: BindingsBuilder(() {
             Get.lazyPut<AuthController>(() => sl<AuthController>());

@@ -81,6 +81,7 @@ flutter:
   assets:
     - assets/img/parents-with-their-children-walking-forest 1.png
     - assets/icon/
+    - .env
     - lib/l10n/ 
 
   # To add assets to your application, add an assets section, like this:

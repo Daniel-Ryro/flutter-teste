@@ -4,9 +4,9 @@ import '../models/user_model.dart';
 
 // Definição da interface para o data source remoto de autenticação
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login();  // Método para realizar o login
+  Future<UserModel> login(); // Método para realizar o login
   Future<UserModel> signUp(); // Método para realizar o cadastro
-  Future<void> logout(String idToken); // Método para realizar o logout, agora requer o idToken
+  Future<void> logout(String idToken); // Método para realizar o logout
 }
 
 // Implementação concreta do AuthRemoteDataSource
@@ -22,11 +22,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> login() async {
     final AuthorizationTokenRequest request = AuthorizationTokenRequest(
-      ApiConstants.clientId,          // ID do cliente para o OAuth
-      ApiConstants.redirectUri,       // URI de redirecionamento configurada para o cliente
-      issuer: ApiConstants.issuer,    // Emissor (Issuer) do OAuth
-      scopes: ApiConstants.scopes,    // Escopos de autorização solicitados (ex.: profile, email)
-      promptValues: ['login'],        // Garante que sempre exiba a tela de login
+      ApiConstants.clientId,
+      ApiConstants.redirectUri,
+      issuer: ApiConstants.issuer,
+      scopes: ApiConstants.scopes,
+      promptValues: ['login'], // Garante que sempre exiba a tela de login
+      allowInsecureConnections: false, // Certifica-se de que as conexões são seguras
     );
 
     try {
@@ -35,8 +36,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (result != null) {
         return UserModel(
-          idToken: result.idToken!,           // Token de identidade (JWT)
-          accessToken: result.accessToken!,   // Token de acesso
+          idToken: result.idToken!, // Token de identidade (JWT)
+          accessToken: result.accessToken!, // Token de acesso
           refreshToken: result.refreshToken!, // Token de atualização
         );
       } else {
@@ -58,9 +59,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> logout(String idToken) async {
     try {
       final EndSessionRequest request = EndSessionRequest(
-        idTokenHint: idToken,                    // Token de ID do usuário para encerrar a sessão
+        idTokenHint: idToken, // Token de ID do usuário para encerrar a sessão
         postLogoutRedirectUrl: ApiConstants.redirectUri,
-        issuer: ApiConstants.issuer,
+        issuer: ApiConstants.issuer, // O issuer já contém o tenantId, não sendo necessário concatená-lo
       );
 
       await _appAuth.endSession(request);
@@ -68,6 +69,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw Exception('Erro ao fazer logout: $e');
     }
   }
-
-  
 }
