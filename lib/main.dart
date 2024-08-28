@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:guarda_digital_flutter/features/account/controller/account_controller.dart';
+import 'package:guarda_digital_flutter/features/viacep/controller/viacep_controller.dart';
+import 'package:guarda_digital_flutter/features/viacep/domain/usecases/get_cep_data.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
@@ -44,7 +47,7 @@ void main() async {
 }
 class MyApp extends StatelessWidget {
   final String initialRoute;
-  
+
   const MyApp({super.key, required this.initialRoute});
 
   @override
@@ -59,6 +62,8 @@ class MyApp extends StatelessWidget {
           onGenerateRoute: AppRoutes.generateRoute,
           initialBinding: BindingsBuilder(() {
             Get.lazyPut<AuthController>(() => sl<AuthController>());
+            Get.lazyPut<AccountController>(() => sl<AccountController>());
+            Get.lazyPut<ViaCepController>(() => ViaCepController(sl<GetCepData>()));
           }),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

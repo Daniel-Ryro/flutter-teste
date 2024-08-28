@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/daily_routine/widgets/my_accounts_header.dart';
-import '../widgets/account_card.dart';
-import '../widgets/account_item.dart';
+import 'package:guarda_digital_flutter/features/daily.routine/widgets/my_accounts_header.dart';
+import 'account_card.dart';
+import 'account_item.dart';
 
 class MyAccountsTabContent extends StatelessWidget {
   const MyAccountsTabContent({Key? key}) : super(key: key);

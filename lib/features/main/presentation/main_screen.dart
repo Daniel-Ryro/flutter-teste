@@ -3,8 +3,8 @@ import 'package:guarda_digital_flutter/features/home/presentation/home_screen.da
 import 'package:guarda_digital_flutter/features/vault/presentation/vault_screen.dart';
 
 import '../../../core/widgets/custom_bottom_navigation_bar.dart';
-import '../../after_life/presentation/after_life_screen.dart';
-import '../../daily_routine/presentation/daily_routine_screen.dart';
+import '../../after.life/presentation/after_life_screen.dart';
+import '../../daily.routine/presentation/daily_routine_screen.dart';
 import '../../memories/presentation/memories_screen.dart';
 import '../../pets/presentation/pets_screen.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/asset_estate_card.dart';
+import 'package:guarda_digital_flutter/features/after.life/widgets/my_wish_content_card.dart';
 import '../../../core/widgets/rectangle_button.dart'; 
-import '../../../styles.dart'; 
+import '../../../styles.dart';
 
-class AssetsEstatePage extends StatelessWidget {
-  const AssetsEstatePage({super.key});
+class MyWishPage extends StatelessWidget {
+  const MyWishPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +17,16 @@ class AssetsEstatePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Botão retangular para ações relacionadas a "BENS E PATRIMÔNIO"
+              // Botão retangular para ações relacionadas a "MEUS DESEJOS"
               RectangleButton(
-                text: 'BENS E PATRIMÔNIO',
+                text: 'MEUS DESEJOS',
                 color: AppColors.pink, // Define a cor do botão
                 onPressed: () {
                   // Ação a ser executada quando o botão for pressionado
                 },
               ),
               SizedBox(height: 16.h), // Espaçamento vertical entre o botão e o próximo conteúdo
-              const ContentCard(), // Widget personalizado que representa o conteúdo relacionado a "BENS E PATRIMÔNIO"
+              const MyWishContentCard(), // Widget personalizado que representa o conteúdo relacionado a "MEUS DESEJOS"
             ],
           ),
         ),

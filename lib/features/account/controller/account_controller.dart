@@ -15,6 +15,7 @@ class AccountController extends GetxController {
   var user = Rxn<UserModel>(); // Modifiquei para usar diretamente UserModel
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  var address = ''.obs; // Adicionei o campo address
 
   @override
   void onInit() {
@@ -35,11 +36,15 @@ class AccountController extends GetxController {
         user.value = null; // Limpe o user em caso de falha
       },
       (userData) {
-        // Como agora sabemos que userData é um UserModel, podemos fazer um cast seguro
         user.value = userData as UserModel;
       },
     );
 
     isLoading.value = false;
+  }
+
+  // Função para atualizar o endereço a partir da CepModel
+  void updateAddress(String newAddress) {
+    address.value = newAddress;
   }
 }

@@ -71,11 +71,12 @@ class UserSettingsMyInfos extends StatelessWidget {
                     ],
                   ),
                   child: PersonalInfoSection(
-                    cpf: user.identifier ?? 'N/A',
-                    birthDate: user.setupExpireDate ?? 'N/A',
-                    email: user.email ?? 'N/A',
-                    phone: user.cellPhone ?? 'N/A',
-                    // não vem na api address: 'Rua Anchieta, 562', maritalStatus: 'Casado',
+                    cpf: user.identifier,
+                    birthDate: user.setupExpireDate,
+                    email: user.email,
+                    phone: user.cellPhone,
+                    address: accountController.address.value, // Usando o address do controller
+                    maritalStatus: 'Casado',
                   ),
                 ),
                 SizedBox(height: 20.h),

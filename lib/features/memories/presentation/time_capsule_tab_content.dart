@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/title_section.dart';
+import 'package:guarda_digital_flutter/features/after.life/widgets/title_section.dart';
 import '../../../styles.dart';
 import '../widgets/time_capsule_card.dart';
 import '../widgets/time_capsule_header.dart';

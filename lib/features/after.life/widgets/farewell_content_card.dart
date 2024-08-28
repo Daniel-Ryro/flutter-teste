@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/my_wish_text_fields_section.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/my_wish_video_message_section.dart';
 import '../../../styles.dart';
-import '../widgets/title_section.dart';
-import 'instructions_section.dart';
+import 'funeral_type_section.dart';
+import 'service_type_input.dart';
+import 'instructions_input.dart';
+import 'title_section.dart';
 
-
-class MyWishContentCard extends StatelessWidget {
-  const MyWishContentCard({Key? key}) : super(key: key);
+class FarewellContentCard extends StatelessWidget {
+  const FarewellContentCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +23,15 @@ class MyWishContentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TitleSection(
-              title: 'Meus Desejos',
-              subtitle:
-                  'Deixe seus desejos e orientações sobre suas vontades para os executores e beneficiários',
+              title: 'Despedida',
+              subtitle: 'Escolha o tipo de despedida que você quer',
             ),
             SizedBox(height: 16.h),
-            const GeneralInstructionsSection (),
+            const FuneralTypeSection(),
             SizedBox(height: 16.h),
-            const MyWishTextFieldsSection(),
+            const ServiceTypeInput(),
             SizedBox(height: 16.h),
-            const VideoMessageSection(),
+            const InstructionsInput(),
           ],
         ),
       ),

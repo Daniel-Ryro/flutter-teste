@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/tribute_title_section.dart';
+import 'package:guarda_digital_flutter/features/after.life/widgets/tribute_title_section.dart';
 import '../../../core/widgets/action_button_widget.dart';
 import '../../../styles.dart';
-import '../widgets/instructions_section.dart';
-import '../widgets/recommendations_section.dart';
+import 'instructions_section.dart';
+import 'recommendations_section.dart';
 
 class TributeContentCard extends StatelessWidget {
   const TributeContentCard({Key? key}) : super(key: key);

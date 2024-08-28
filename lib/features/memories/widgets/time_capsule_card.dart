@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_digital_flutter/features/after_life/widgets/title_section.dart';
+import 'package:guarda_digital_flutter/features/after.life/widgets/title_section.dart';
 
 class TimeCapsuleCard extends StatelessWidget {
   const TimeCapsuleCard({super.key});

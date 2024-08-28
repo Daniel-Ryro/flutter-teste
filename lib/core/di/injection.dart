@@ -14,6 +14,10 @@ import '../../features/account/data/datasources/account_remote_data_source.dart'
 import '../../features/account/data/repositories/account_repository_impl.dart';
 import '../../features/account/domain/repositories/account_repository.dart';
 import '../../features/account/domain/usecases/get_account_data.dart';
+import '../../features/viacep/controller/viacep_controller.dart';
+import '../../features/viacep/data/datasources/viacep_remote_data_source.dart';
+import '../../features/viacep/domain/repositories/viacep_repository.dart';
+import '../../features/viacep/domain/usecases/get_cep_data.dart';
 import '../utils/constants.dart';
 
 // Instância global do GetIt para gerenciamento de injeção de dependências
@@ -42,6 +46,10 @@ void setupInjection() {
                 FlutterSecureStorage>(), // Usa a instância do FlutterSecureStorage injetada
           ));
 
+  // Registre o ViaCepRemoteDataSource
+  sl.registerLazySingleton<ViaCepRemoteDataSource>(
+      () => ViaCepRemoteDataSource(sl<Dio>()));
+
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
         remoteDataSource: sl<
@@ -55,6 +63,10 @@ void setupInjection() {
             AccountRemoteDataSource>(), // Implementação do repositório de conta
       ));
 
+  sl.registerLazySingleton<ViaCepRepository>(() => ViaCepRepositoryImpl(
+        sl<ViaCepRemoteDataSource>(),
+      ));
+
   // Use cases
   sl.registerLazySingleton(
       () => LoginUseCase(sl<AuthRepository>())); // Caso de uso para login
@@ -62,6 +74,9 @@ void setupInjection() {
       () => SignUpUseCase(sl<AuthRepository>())); // Caso de uso para cadastro
   sl.registerLazySingleton(() => GetAccountData(
       sl<AccountRepository>())); // Caso de uso para obter dados da conta
+
+  // Registre o caso de uso GetCepData
+  sl.registerLazySingleton(() => GetCepData(sl<ViaCepRepository>()));
 
   // Controllers
   sl.registerLazySingleton(() => AuthController(
@@ -73,6 +88,9 @@ void setupInjection() {
   sl.registerFactory(() => AccountController(
         getAccountDataUseCase: sl<GetAccountData>(),
       ));
+
+  // Registre o ViaCepController
+  sl.registerFactory(() => ViaCepController(sl<GetCepData>()));
 }
 
 // Função para configurar e registrar o Dio como cliente HTTP

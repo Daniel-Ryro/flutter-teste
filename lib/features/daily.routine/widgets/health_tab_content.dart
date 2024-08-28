@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:guarda_digital_flutter/features/daily_routine/widgets/healt_header_section.dart';
-import 'package:guarda_digital_flutter/features/daily_routine/widgets/medical_tab_content.dart';
-import 'package:guarda_digital_flutter/features/daily_routine/widgets/period_selector.dart';
-import 'package:guarda_digital_flutter/features/daily_routine/widgets/question_list.dart';
+import 'package:guarda_digital_flutter/features/daily.routine/widgets/healt_header_section.dart';
+import 'package:guarda_digital_flutter/features/daily.routine/widgets/medical_tab_content.dart';
+import 'package:guarda_digital_flutter/features/daily.routine/widgets/period_selector.dart';
+import 'package:guarda_digital_flutter/features/daily.routine/widgets/question_list.dart';
+
 import '../../../core/widgets/action_button_widget.dart';
 import '../../../styles.dart';
 
