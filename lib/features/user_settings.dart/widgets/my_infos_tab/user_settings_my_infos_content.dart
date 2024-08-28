@@ -1,7 +1,7 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:guarda_digital_flutter/features/user_settings.dart/widgets/my_infos_tab/personal_info_section.dart';
 import 'package:guarda_digital_flutter/features/user_settings.dart/widgets/my_infos_tab/profile_indicator.dart';
 
@@ -32,7 +32,7 @@ class UserSettingsMyInfos extends StatelessWidget {
 
         final user = accountController.user.value;
         if (user == null) {
-          return const Center(child: const Text('Nenhum dado disponível.'));
+          return const Center(child: Text('Nenhum dado disponível.'));
         }
 
         return SingleChildScrollView(
@@ -70,7 +70,13 @@ class UserSettingsMyInfos extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const PersonalInfoSection(),
+                  child: PersonalInfoSection(
+                    cpf: user.identifier ?? 'N/A',
+                    birthDate: user.setupExpireDate ?? 'N/A',
+                    email: user.email ?? 'N/A',
+                    phone: user.cellPhone ?? 'N/A',
+                    // não vem na api address: 'Rua Anchieta, 562', maritalStatus: 'Casado',
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 const Text(

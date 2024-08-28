@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/features/user_settings.dart/widgets/my_infos_tab/personal_info_item.dart';
-
 import '../../../../routes/app_routes.dart';
 
 class PersonalInfoSection extends StatelessWidget {
-  const PersonalInfoSection({super.key});
+  final String cpf;
+  final String birthDate;
+  final String email;
+  final String phone;
+  final String? address;
+  final String? maritalStatus;
+
+  const PersonalInfoSection({
+    super.key,
+    required this.cpf,
+    required this.birthDate,
+    required this.email,
+    required this.phone,
+    this.address,
+    this.maritalStatus,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +39,19 @@ class PersonalInfoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PersonalInfoItem(
+          PersonalInfoItem(
             title: 'CPF',
-            value: '278.805.056-20',
+            value: cpf,
           ),
           const Divider(),
-          const PersonalInfoItem(
+          PersonalInfoItem(
             title: 'Data Nascimento',
-            value: '10/01/2021',
+            value: birthDate,
           ),
           const Divider(),
           PersonalInfoItem(
             title: 'E-mail',
-            value: 'jorgealmeida@gmail.com',
+            value: email,
             trailingIcon: Icons.arrow_forward_ios,
             onTap: () {
               // Adicione a lógica de navegação aqui se necessário
@@ -46,7 +60,7 @@ class PersonalInfoSection extends StatelessWidget {
           const Divider(),
           PersonalInfoItem(
             title: 'Tel/Cel:',
-            value: '(11) 90505-5045',
+            value: phone,
             trailingIcon: Icons.arrow_forward_ios,
             onTap: () {
               // Adicione a lógica de navegação aqui se necessário
@@ -55,16 +69,16 @@ class PersonalInfoSection extends StatelessWidget {
           const Divider(),
           PersonalInfoItem(
             title: 'Endereço',
-            value: 'Rua Anchieta, 562',
+            value: address.toString(),
             trailingIcon: Icons.arrow_forward_ios,
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.zipCode);
             },
           ),
           const Divider(),
-          const PersonalInfoItem(
+          PersonalInfoItem(
             title: 'Estado civil',
-            value: 'Casado',
+            value: maritalStatus.toString(),
           ),
         ],
       ),

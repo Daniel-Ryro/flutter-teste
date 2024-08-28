@@ -150,26 +150,4 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  // Método para realizar o logout do usuário
-  void logout() async {
-    try {
-      final String? idToken = await secureStorage.read(key: 'idToken');
-      if (idToken != null) {
-        await _appAuth.endSession(
-          EndSessionRequest(
-            idTokenHint: idToken,
-            postLogoutRedirectUrl: ApiConstants.redirectUri,
-            issuer: ApiConstants.issuer,
-          ),
-        );
-        // Limpa os tokens armazenados
-        await secureStorage.delete(key: 'idToken');
-        await secureStorage.delete(key: 'accessToken');
-        await secureStorage.delete(key: 'refreshToken');
-      }
-    } catch (e) {
-      print('Erro ao fazer logout: $e');
-    }
-  }
 }

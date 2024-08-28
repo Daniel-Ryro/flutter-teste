@@ -2,8 +2,6 @@ import '../../domain/entities/user.dart';
 
 class UserModel extends User {
   final int accountId;
-  final String name;
-  final String email;
   final String proofOfLifeExpiry;
   final String firstName;
   final String middleName;
@@ -16,8 +14,8 @@ class UserModel extends User {
 
   UserModel({
     required this.accountId,
-    required this.name,
-    required this.email,
+    required String name,
+    required String email,
     required this.proofOfLifeExpiry,
     required this.firstName,
     required this.middleName,
@@ -31,18 +29,18 @@ class UserModel extends User {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      accountId: json['accountId'] as int,  // Assegure que é do tipo int
-      name: json['name'] ?? '',  // Se 'name' puder ser null, atribua uma string vazia
-      email: json['email'] as String,  // Assegure que é do tipo String
-      proofOfLifeExpiry: json['proofOfLifeExpiry'] as String,  // Assegure que é do tipo String
-      firstName: json['firstName'] as String,  // Assegure que é do tipo String
-      middleName: json['middleName'] as String,  // Assegure que é do tipo String
-      lastName: json['lastName'] as String,  // Assegure que é do tipo String
-      cellPhone: json['cellPhone'] as String,  // Assegure que é do tipo String
-      setupExpireDate: json['setupExpireDate'] as String,  // Assegure que é do tipo String
-      setupExpire: json['setupExpire'] as bool,  // Assegure que é do tipo bool
-      identifier: json['identifier'] as String,  // Assegure que é do tipo String
-      status: json['status'] as int,  // Assegure que é do tipo int
+      accountId: json['accountId'] as int,
+      name: json['name'] ?? '',
+      email: json['email'] as String,
+      proofOfLifeExpiry: json['proofOfLifeExpiry'] as String,
+      firstName: json['firstName'] as String,
+      middleName: json['middleName'] as String,
+      lastName: json['lastName'] as String,
+      cellPhone: json['cellPhone'] as String,
+      setupExpireDate: json['setupExpireDate'] as String,
+      setupExpire: json['setupExpire'] as bool,
+      identifier: json['identifier'] as String,
+      status: json['status'] as int,
     );
   }
 

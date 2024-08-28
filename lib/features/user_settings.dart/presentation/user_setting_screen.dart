@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/custom_bottom_navigation_bar.dart';
 import '../../../routes/app_routes.dart';
 import '../../../styles.dart';
+import '../../login/controllers/auth_controller.dart';
 import '../../main/presentation/main_screen.dart';
 import '../widgets/my_infos_tab/user_settings_content.dart';
 import '../widgets/my_infos_tab/user_settings_tab_bar.dart';
@@ -17,6 +19,7 @@ class UserSettingsScreen extends StatefulWidget {
 
 class _UserSettingsScreenState extends State<UserSettingsScreen> {
   int _selectedTabIndex = 0;
+  final AuthController _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => MainScreen(),
+                builder: (context) => const MainScreen(),
                 settings: RouteSettings(arguments: index)),
             (Route<dynamic> route) => false,
           );
