@@ -166,4 +166,34 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
+
+   // Método para atualizar o token
+  Future<void> refreshToken() async {
+    try {
+      final String? refreshToken = await secureStorage.read(key: 'refreshToken');
+
+      if (refreshToken != null) {
+        final TokenResponse? tokenResponse = await _appAuth.token(
+          TokenRequest(
+            ApiConstants.clientId,
+            ApiConstants.redirectUri,
+            refreshToken: refreshToken,
+            discoveryUrl: '${ApiConstants.issuer}/.well-known/openid-configuration',
+            scopes: ApiConstants.scopes,
+          ),
+        );
+
+        if (tokenResponse != null) {
+          await _saveTokens(tokenResponse);
+          print('Token atualizado com sucesso.');
+        } else {
+          print('Erro ao atualizar o token.');
+        }
+      } else {
+        print('Refresh token não encontrado.');
+      }
+    } catch (e) {
+      print('Erro ao atualizar o token: $e');
+    }
+  }
 }

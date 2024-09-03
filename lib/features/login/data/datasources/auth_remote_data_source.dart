@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../../core/utils/constants.dart';
@@ -66,7 +67,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final EndSessionRequest request = EndSessionRequest(
         idTokenHint: idToken,
-        postLogoutRedirectUrl: ApiConstants.redirectUri, // Adicione o redirecionamento de logout
+        postLogoutRedirectUrl:
+            ApiConstants.redirectUri, // Adicione o redirecionamento de logout
         issuer: ApiConstants.issuer,
       );
 
@@ -84,6 +86,36 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Erro ao fazer logout: $e');
+    }
+  }
+
+  Future<void> refreshToken(String refreshToken) async {
+    try {
+      final TokenResponse? result = await _appAuth.token(
+        TokenRequest(
+          ApiConstants.clientId,
+          ApiConstants.redirectUri,
+          refreshToken: refreshToken,
+          discoveryUrl:
+              '${ApiConstants.issuer}/.well-known/openid-configuration',
+          scopes: ApiConstants.scopes,
+        ),
+      );
+
+      if (result != null) {
+        // Atualize o armazenamento seguro com os novos tokens
+        const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+        await secureStorage.write(key: 'idToken', value: result.idToken);
+        await secureStorage.write(
+            key: 'accessToken', value: result.accessToken);
+        await secureStorage.write(
+            key: 'refreshToken', value: result.refreshToken);
+        print('Token atualizado com sucesso.');
+      } else {
+        print('Erro ao atualizar o token.');
+      }
+    } catch (e) {
+      print('Erro ao atualizar o token: $e');
     }
   }
 }
