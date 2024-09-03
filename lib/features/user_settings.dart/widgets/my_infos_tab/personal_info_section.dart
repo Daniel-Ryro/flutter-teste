@@ -47,8 +47,7 @@ class PersonalInfoSection extends StatelessWidget {
         children: [
           PersonalInfoItem(
             title: 'CPF',
-            value: maskCpfFormatter
-                .maskText(cpf), // Aplica a máscara ao valor do CPF
+            value: maskCpfFormatter.maskText(cpf),
           ),
           const Divider(),
           PersonalInfoItem(

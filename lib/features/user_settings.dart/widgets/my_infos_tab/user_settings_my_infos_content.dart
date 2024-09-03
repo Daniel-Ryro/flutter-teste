@@ -76,27 +76,13 @@ class UserSettingsMyInfos extends StatelessWidget {
                         label: 'Preencha todos os dados',
                       ),
                       SizedBox(height: 20.h),
-                      Container(
-                        padding: EdgeInsets.all(20.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 8.r,
-                              offset: Offset(0, 4.h),
-                            ),
-                          ],
-                        ),
-                        child: PersonalInfoSection(
-                          cpf: user.document,
-                          birthDate: formattedDate,
-                          email: user.email,
-                          phone: user.cellPhone,
-                          address: accountController.address.value,
-                          maritalStatus: accountController.maritalStatus.value,
-                        ),
+                      PersonalInfoSection(
+                        cpf: user.document,
+                        birthDate: formattedDate,
+                        email: user.email,
+                        phone: user.cellPhone,
+                        address: accountController.address.value,
+                        maritalStatus: accountController.maritalStatus.value,
                       ),
                       SizedBox(height: 20.h),
                       const Text(

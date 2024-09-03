@@ -14,8 +14,10 @@ class ZipCodeScreen extends StatelessWidget {
   ZipCodeScreen({super.key});
 
   final ViaCepController viaCepController = Get.find<ViaCepController>();
-  final AccountController accountController = Get.find<AccountController>(); // Obtenha o AccountController
+  final AccountController accountController = Get.find<AccountController>();
   final TextEditingController cepController = TextEditingController();
+  final TextEditingController numberController = TextEditingController(); // Controlador para o número
+  final TextEditingController complementController = TextEditingController(); // Novo controlador para o complemento
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +88,42 @@ class ZipCodeScreen extends StatelessWidget {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      // Limpar o estado ao alterar o CEP
+                      viaCepController.resetState();
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: numberController,
+                    decoration: InputDecoration(
+                      hintText: 'Número do endereço',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: complementController,
+                    decoration: InputDecoration(
+                      hintText: 'Complemento',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20.h),
                   Obx(() {
                     return ActionButton(
-                      text: viaCepController.buttonText.value, // Controla o texto do botão
+                      text: viaCepController.buttonText.value,
                       onPressed: () async {
                         String cep = cepController.text;
-                        if (cep.isNotEmpty) {
+                        String number = numberController.text; // Obtém o número
+                        String complement = complementController.text; // Obtém o complemento
+                        
+                        if (cep.isNotEmpty && number.isNotEmpty) {
                           if (viaCepController.buttonText.value == 'CONTINUE') {
                             await viaCepController.fetchCepData(cep);
                             if (viaCepController.errorMessage.value.isEmpty) {
@@ -103,13 +133,13 @@ class ZipCodeScreen extends StatelessWidget {
                               Get.snackbar('Erro', viaCepController.errorMessage.value);
                             }
                           } else {
-                            // Atualize o endereço no AccountController
-                            final address = '${viaCepController.cepModel.value?.logradouro}, ${viaCepController.cepModel.value?.bairro}, ${viaCepController.cepModel.value?.localidade} - ${viaCepController.cepModel.value?.uf}';
+                            final address =
+                                '${viaCepController.cepModel.value?.logradouro}, $number, $complement, ${viaCepController.cepModel.value?.bairro}, ${viaCepController.cepModel.value?.localidade} - ${viaCepController.cepModel.value?.uf}';
                             accountController.updateAddress(address);
                             Navigator.pop(context);
                           }
                         } else {
-                          Get.snackbar('Erro', 'Por favor, digite um CEP válido');
+                          Get.snackbar('Erro', 'Por favor, digite um CEP e número válidos');
                         }
                       },
                       textColor: Colors.white,
@@ -153,7 +183,7 @@ class ZipCodeScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: 0, // ou a aba correspondente
+        currentIndex: 0,
         onTabSelected: (index) {
           Navigator.pushAndRemoveUntil(
             context,

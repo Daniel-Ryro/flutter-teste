@@ -30,8 +30,15 @@ class ViaCepController extends GetxController {
 
     cepModel.value = result;
     _saveAddress(result); // Salvar o endereço quando a busca é bem-sucedida
-  
+
     isLoading.value = false;
+  }
+
+  // Método para redefinir o estado do controlador
+  void resetState() {
+    errorMessage.value = '';
+    cepModel.value = null;
+    buttonText.value = 'CONTINUE';
   }
 
   Future<void> _saveAddress(CepModel data) async {
