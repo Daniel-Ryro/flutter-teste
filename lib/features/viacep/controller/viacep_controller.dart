@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../data/models/cep_model.dart';
 import '../domain/usecases/get_cep_data.dart';
 
 class ViaCepController extends GetxController {
   final GetCepData getCepDataUseCase;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -12,21 +16,36 @@ class ViaCepController extends GetxController {
 
   ViaCepController(this.getCepDataUseCase);
 
+  @override
+  void onInit() {
+    super.onInit();
+    _loadSavedAddress(); // Carregar o endereço salvo ao iniciar o controlador
+  }
+
   Future<void> fetchCepData(String cep) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+    isLoading.value = true;
+    errorMessage.value = '';
 
-      // Tenta buscar os dados do CEP
-      final cepData = await getCepDataUseCase.call(cep);
-      cepModel.value = cepData; // Atualiza o modelo com os dados obtidos
+    final result = await getCepDataUseCase.call(cep);
 
-      buttonText.value = 'Editar Endereço'; // Atualiza o texto do botão após o sucesso
-    } catch (e) {
-      // Se houver um erro, captura a exceção e define a mensagem de erro
-      errorMessage.value = 'Erro ao buscar o CEP: $e';
-    } finally {
-      isLoading.value = false; // Garante que o indicador de carregamento seja desligado
+    cepModel.value = result;
+    _saveAddress(result); // Salvar o endereço quando a busca é bem-sucedida
+  
+    isLoading.value = false;
+  }
+
+  Future<void> _saveAddress(CepModel data) async {
+    String addressJson = jsonEncode(data.toJson());
+    await _secureStorage.write(key: 'address', value: addressJson);
+  }
+
+  Future<void> _loadSavedAddress() async {
+    String? savedAddress = await _secureStorage.read(key: 'address');
+    if (savedAddress != null) {
+      // Converte a string JSON salva de volta para um Map<String, dynamic>
+      Map<String, dynamic> addressMap = jsonDecode(savedAddress);
+      // Cria a instância de CepModel usando o mapa decodificado
+      cepModel.value = CepModel.fromJson(addressMap);
     }
   }
 }

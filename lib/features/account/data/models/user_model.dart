@@ -11,6 +11,7 @@ class UserModel extends User {
   final bool setupExpire;
   final String identifier;
   final int status;
+  final String document;
 
   UserModel({
     required this.accountId,
@@ -25,6 +26,7 @@ class UserModel extends User {
     required this.setupExpire,
     required this.identifier,
     required this.status,
+    required this.document,
   }) : super(id: accountId.toString(), name: name, email: email);
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,8 @@ class UserModel extends User {
       setupExpire: json['setupExpire'] as bool,
       identifier: json['identifier'] as String,
       status: json['status'] as int,
+      document: json['document']
+          as String, // Novo campo adicionado à fábrica fromJson
     );
   }
 
@@ -58,6 +62,7 @@ class UserModel extends User {
       'setupExpire': setupExpire,
       'identifier': identifier,
       'status': status,
+      'document': document, // Novo campo adicionado ao método toJson
     };
   }
 }

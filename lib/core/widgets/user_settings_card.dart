@@ -57,7 +57,7 @@ class UserProfileCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: AppColors.blackDefault
                 ),
               ),
               if (additionalText != null)

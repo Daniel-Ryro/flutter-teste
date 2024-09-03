@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
           initialBinding: BindingsBuilder(() {
             Get.lazyPut<AuthController>(() => sl<AuthController>());
             Get.lazyPut<AccountController>(() => sl<AccountController>());
-            Get.lazyPut<ViaCepController>(() => ViaCepController(sl<GetCepData>()));
+            Get.put<ViaCepController>(ViaCepController(sl<GetCepData>()));
           }),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

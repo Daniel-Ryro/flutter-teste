@@ -29,9 +29,9 @@ void setupInjection() {
   setupDioClient();
 
   // Dependências externas
-  sl.registerLazySingleton(() =>
-      const FlutterSecureStorage()); // Armazenamento seguro para senhas e tokens
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<FlutterSecureStorage>(
+      () => const FlutterSecureStorage()); // Armazenamento seguro para senhas e tokens
+  sl.registerLazySingleton<FlutterAppAuth>(
       () => FlutterAppAuth()); // Autenticação com OAuth2/OpenID
 
   // Data sources
@@ -52,15 +52,12 @@ void setupInjection() {
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-        remoteDataSource: sl<
-            AuthRemoteDataSource>(), // Implementação do repositório de autenticação
-        secureStorage: sl<
-            FlutterSecureStorage>(), // Passa o FlutterSecureStorage para o repositório
+        remoteDataSource: sl<AuthRemoteDataSource>(),
+        secureStorage: sl<FlutterSecureStorage>(),
       ));
 
   sl.registerLazySingleton<AccountRepository>(() => AccountRepositoryImpl(
-        remoteDataSource: sl<
-            AccountRemoteDataSource>(), // Implementação do repositório de conta
+        remoteDataSource: sl<AccountRemoteDataSource>(),
       ));
 
   sl.registerLazySingleton<ViaCepRepository>(() => ViaCepRepositoryImpl(
@@ -68,40 +65,37 @@ void setupInjection() {
       ));
 
   // Use cases
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<LoginUseCase>(
       () => LoginUseCase(sl<AuthRepository>())); // Caso de uso para login
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<SignUpUseCase>(
       () => SignUpUseCase(sl<AuthRepository>())); // Caso de uso para cadastro
-  sl.registerLazySingleton(() => GetAccountData(
-      sl<AccountRepository>())); // Caso de uso para obter dados da conta
-
-  // Registre o caso de uso GetCepData
-  sl.registerLazySingleton(() => GetCepData(sl<ViaCepRepository>()));
+  sl.registerLazySingleton<GetAccountData>(
+      () => GetAccountData(sl<AccountRepository>())); // Caso de uso para obter dados da conta
+  sl.registerLazySingleton<GetCepData>(() => GetCepData(sl<ViaCepRepository>()));
 
   // Controllers
-  sl.registerLazySingleton(() => AuthController(
+  sl.registerLazySingleton<AuthController>(() => AuthController(
         loginUseCase: sl<LoginUseCase>(), // Controller para lidar com login
-        signUpUseCase:
-            sl<SignUpUseCase>(), // Controller para lidar com cadastro
+        signUpUseCase: sl<SignUpUseCase>(), // Controller para lidar com cadastro
+        authRepository: sl<AuthRepository>(), // Adiciona o AuthRepository aqui
       ));
 
-  sl.registerFactory(() => AccountController(
-        getAccountDataUseCase: sl<GetAccountData>(),
+  // Corrigido para passar o parâmetro correto para o construtor
+  sl.registerFactory<AccountController>(() => AccountController(
+        sl<GetAccountData>(), // Passa o GetAccountData como argumento posicional
       ));
 
-  // Registre o ViaCepController
-  sl.registerFactory(() => ViaCepController(sl<GetCepData>()));
+  sl.registerFactory<ViaCepController>(
+      () => ViaCepController(sl<GetCepData>()));
 }
 
 // Função para configurar e registrar o Dio como cliente HTTP
 void setupDioClient() {
   final dio = Dio(
     BaseOptions(
-      baseUrl:
-          ApiConstants.baseUrl, // Define a URL base para todas as requisições
+      baseUrl: ApiConstants.baseUrl, // Define a URL base para todas as requisições
       headers: {
-        'Accept':
-            'application/json', // Define o header padrão para aceitar respostas JSON
+        'Accept': 'application/json', // Define o header padrão para aceitar respostas JSON
       },
     ),
   );
@@ -122,5 +116,5 @@ void setupDioClient() {
     },
   ));
 
-  sl.registerLazySingleton(() => dio); // Registra o Dio como singleton
+  sl.registerLazySingleton<Dio>(() => dio); // Registra o Dio como singleton
 }

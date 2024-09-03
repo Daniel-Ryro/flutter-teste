@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/features/user_settings.dart/widgets/my_infos_tab/personal_info_item.dart';
-import '../../../../routes/app_routes.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import '../../../../routes/app_routes.dart'; // Importa a biblioteca de máscara
 
 class PersonalInfoSection extends StatelessWidget {
   final String cpf;
@@ -11,7 +13,11 @@ class PersonalInfoSection extends StatelessWidget {
   final String? address;
   final String? maritalStatus;
 
-  const PersonalInfoSection({
+  // Adicione o formatter para o CPF
+  final maskCpfFormatter = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
+
+  PersonalInfoSection({
     super.key,
     required this.cpf,
     required this.birthDate,
@@ -41,7 +47,8 @@ class PersonalInfoSection extends StatelessWidget {
         children: [
           PersonalInfoItem(
             title: 'CPF',
-            value: cpf,
+            value: maskCpfFormatter
+                .maskText(cpf), // Aplica a máscara ao valor do CPF
           ),
           const Divider(),
           PersonalInfoItem(
@@ -79,6 +86,10 @@ class PersonalInfoSection extends StatelessWidget {
           PersonalInfoItem(
             title: 'Estado civil',
             value: maritalStatus.toString(),
+            trailingIcon: Icons.arrow_forward_ios,
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.maritalStatusScreen);
+            },
           ),
         ],
       ),

@@ -1,5 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../../core/utils/constants.dart';
+import '../../presentation/landing_screen.dart';
 import '../models/user_model.dart';
 
 // Definição da interface para o data source remoto de autenticação
@@ -11,7 +15,8 @@ abstract class AuthRemoteDataSource {
 
 // Implementação concreta do AuthRemoteDataSource
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final FlutterAppAuth _appAuth; // Dependência para manipular o fluxo de autenticação usando OAuth 2.0
+  final FlutterAppAuth
+      _appAuth; // Dependência para manipular o fluxo de autenticação usando OAuth 2.0
 
   // Construtor que recebe a instância do FlutterAppAuth e a armazena como variável privada
   AuthRemoteDataSourceImpl({
@@ -27,7 +32,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       issuer: ApiConstants.issuer,
       scopes: ApiConstants.scopes,
       promptValues: ['login'], // Garante que sempre exiba a tela de login
-      allowInsecureConnections: false, // Certifica-se de que as conexões são seguras
+      allowInsecureConnections:
+          false, // Certifica-se de que as conexões são seguras
     );
 
     try {
@@ -59,12 +65,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> logout(String idToken) async {
     try {
       final EndSessionRequest request = EndSessionRequest(
-        idTokenHint: idToken, // Token de ID do usuário para encerrar a sessão
-        postLogoutRedirectUrl: ApiConstants.redirectUri,
-        issuer: ApiConstants.issuer, // O issuer já contém o tenantId, não sendo necessário concatená-lo
+        idTokenHint: idToken,
+        postLogoutRedirectUrl: ApiConstants.redirectUri, // Adicione o redirecionamento de logout
+        issuer: ApiConstants.issuer,
       );
 
       await _appAuth.endSession(request);
+
+      // Força a navegação de volta para a tela inicial após o logout
+      Get.offAll(() => const LandingScreen());
+    } on PlatformException catch (e) {
+      if (e.code == 'end_session_failed' &&
+          e.message != null &&
+          e.message!.contains('User cancelled flow')) {
+        print('Logout cancelado pelo usuário.');
+      } else {
+        throw Exception('Erro ao fazer logout: ${e.message}');
+      }
     } catch (e) {
       throw Exception('Erro ao fazer logout: $e');
     }

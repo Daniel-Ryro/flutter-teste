@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:guarda_digital_flutter/features/main/presentation/main_screen.dart';
+import 'package:guarda_digital_flutter/features/viacep/presentation/marital_status.dart';
 
 import '../core/bindings/viacep_binding.dart';
 import '../features/daily.routine/presentation/daily_routine_screen.dart';
@@ -29,6 +30,7 @@ class AppRoutes {
   static const String helpScreen = '/helpScreen';
   static const String notificationScreen = '/notificationScreen';
   static const String welcomeScreen = '/welcomeScreen';
+  static const String maritalStatusScreen = '/maritalStatusScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -36,6 +38,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LandingScreen());
       case loginExecute:
         return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
+      case maritalStatusScreen:
+        return MaterialPageRoute(builder: (_) => MaritalStatusScreen());
       case signUpScreen:
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case homeScreen:
@@ -64,7 +68,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HelpSettingsScreen());
       case notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
-
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
