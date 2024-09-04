@@ -2,28 +2,33 @@ import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../core/usecases/usecase.dart';
 import '../data/models/user_model.dart';
+import '../data/models/executor_model.dart';
 import '../domain/usecases/get_account_data.dart';
+import '../domain/usecases/get_executors.dart';
 
 class AccountController extends GetxController {
   final GetAccountData getAccountDataUseCase;
+  final GetExecutors getExecutorsUseCase;
 
   // Variáveis reativas
   var user = Rxn<UserModel>();
+  var executors = <ExecutorModel>[].obs; // Lista de executores
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  var maritalStatus = ''.obs; // Variável reativa para o estado civil
-  var address = ''.obs; // Variável reativa para o endereço
+  var maritalStatus = ''.obs;
+  var address = ''.obs;
 
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage(); // Armazenamento seguro
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  AccountController(this.getAccountDataUseCase);
+  AccountController(this.getAccountDataUseCase, this.getExecutorsUseCase);
 
   @override
   void onInit() {
     super.onInit();
     fetchAccountData();
-    loadMaritalStatus(); // Carrega o estado civil ao iniciar
-    loadAddress(); // Carrega o endereço ao iniciar
+    fetchExecutors(); // Chama o método para buscar os executores ao iniciar
+    loadMaritalStatus();
+    loadAddress();
   }
 
   // Função para buscar os dados do usuário
@@ -46,13 +51,33 @@ class AccountController extends GetxController {
     isLoading.value = false;
   }
 
+  // Função para buscar a lista de executores
+  void fetchExecutors() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    final result = await getExecutorsUseCase.call(const NoParams());
+
+    result.fold(
+      (failure) {
+        errorMessage.value = "Erro ao carregar os executores: ${failure.message}";
+        executors.clear(); // Limpa a lista de executores em caso de erro
+      },
+      (executorsData) {
+        executors.value = executorsData.cast<ExecutorModel>(); // Atribui a lista de executores recuperada
+      },
+    );
+
+    isLoading.value = false;
+  }
+
   // Função para salvar o estado civil
   Future<void> saveMaritalStatus(String status) async {
     try {
       await secureStorage.write(key: 'maritalStatus', value: status);
-      print('Estado civil salvo: $status'); // Debugging print
+      print('Estado civil salvo: $status');
     } catch (e) {
-      print('Erro ao salvar o estado civil: $e'); // Debugging print
+      print('Erro ao salvar o estado civil: $e');
     }
   }
 
@@ -62,13 +87,13 @@ class AccountController extends GetxController {
       String? savedStatus = await secureStorage.read(key: 'maritalStatus');
       if (savedStatus != null) {
         maritalStatus.value = savedStatus;
-        print('Estado civil carregado: $savedStatus'); // Debugging print
+        print('Estado civil carregado: $savedStatus');
       } else {
-        maritalStatus.value = 'Solteiro'; // Estado civil padrão se nada estiver salvo
-        print('Nenhum estado civil salvo encontrado, usando padrão: Solteiro'); // Debugging print
+        maritalStatus.value = 'Solteiro';
+        print('Nenhum estado civil salvo encontrado, usando padrão: Solteiro');
       }
     } catch (e) {
-      print('Erro ao carregar o estado civil: $e'); // Debugging print
+      print('Erro ao carregar o estado civil: $e');
     }
   }
 
@@ -77,9 +102,9 @@ class AccountController extends GetxController {
     try {
       address.value = newAddress;
       await secureStorage.write(key: 'address', value: newAddress);
-      print('Endereço salvo: $newAddress'); // Debugging print
+      print('Endereço salvo: $newAddress');
     } catch (e) {
-      print('Erro ao salvar o endereço: $e'); // Debugging print
+      print('Erro ao salvar o endereço: $e');
     }
   }
 
@@ -89,22 +114,22 @@ class AccountController extends GetxController {
       String? savedAddress = await secureStorage.read(key: 'address');
       if (savedAddress != null) {
         address.value = savedAddress;
-        print('Endereço carregado: $savedAddress'); // Debugging print
+        print('Endereço carregado: $savedAddress');
       }
     } catch (e) {
-      print('Erro ao carregar o endereço: $e'); // Debugging print
+      print('Erro ao carregar o endereço: $e');
     }
   }
 
   // Método para atualizar o estado civil
   Future<void> updateMaritalStatus(String status) async {
     maritalStatus.value = status;
-    await saveMaritalStatus(status); // Salva o estado civil no armazenamento seguro
+    await saveMaritalStatus(status);
   }
 
   // Método para atualizar o endereço
   Future<void> updateAddress(String newAddress) async {
     address.value = newAddress;
-    await saveAddress(newAddress); // Salva o endereço atualizado no armazenamento seguro
+    await saveAddress(newAddress);
   }
 }

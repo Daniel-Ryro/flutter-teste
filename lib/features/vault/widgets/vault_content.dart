@@ -4,7 +4,7 @@ import 'package:guarda_digital_flutter/styles.dart';
 
 import '../../../core/widgets/list_item.dart';
 import '../../../core/widgets/rectangle_button.dart';
-import '../widgets/vault_section.dart';
+import 'vault_section.dart';
 
 class VaultContent extends StatelessWidget {
   const VaultContent({super.key});

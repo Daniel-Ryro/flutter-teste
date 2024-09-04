@@ -15,6 +15,7 @@ class ActionButton extends StatelessWidget {
   final bool isBold;
   final Widget? icon;
   final IconPosition iconPosition;
+  final BorderSide? borderSide; // Borda opcional
 
   const ActionButton({
     super.key,
@@ -30,6 +31,7 @@ class ActionButton extends StatelessWidget {
     this.isBold = true,
     this.icon,
     this.iconPosition = IconPosition.left,
+    this.borderSide, // Inicializando o parâmetro de borda opcional
   });
 
   @override
@@ -41,9 +43,9 @@ class ActionButton extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: buttonColor,
-          side: borderColor != null
+          side: borderSide ?? (borderColor != null
               ? BorderSide(color: borderColor!, width: 2.0)
-              : BorderSide.none,
+              : BorderSide.none), // Define a borda opcional
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guarda_digital_flutter/styles.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/beneficiary_content.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/vault_content.dart';
-import 'package:guarda_digital_flutter/features/vault/presentation/executors_content.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/beneficiary_content.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/vault_content.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/executors_content.dart';
 
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';

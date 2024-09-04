@@ -35,9 +35,19 @@ class VaultSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
-      height: height ?? 300.h,
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(16.w),
       margin: EdgeInsets.symmetric(vertical: 8.h),
+      decoration: BoxDecoration(
+        color: Colors.white, // Fundo branco para o card
+        borderRadius: BorderRadius.circular(12.r), // Bordas arredondadas
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8.r,
+            offset: Offset(0, 4.h),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,7 +70,7 @@ class VaultSection extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: titleFontSize ?? 20.sp,
+                        fontSize: titleFontSize ?? 18.sp,
                         fontWeight: FontWeight.bold,
                         color: textColor ?? Colors.black,
                       ),
@@ -69,7 +79,7 @@ class VaultSection extends StatelessWidget {
                     Text(
                       description,
                       style: TextStyle(
-                        fontSize: descriptionFontSize ?? 16.sp,
+                        fontSize: descriptionFontSize ?? 14.sp,
                         color: textColor ?? Colors.grey[600],
                       ),
                     ),
@@ -79,19 +89,9 @@ class VaultSection extends StatelessWidget {
             ],
           ),
           if (actionWidget != null) ...[
-            SizedBox(height: 8.h),
-            actionWidget!,
+            SizedBox(height: 16.h),
+            Center(child: actionWidget!), // Centraliza o botão de ação
           ],
-          const Spacer(), // Empurra a imagem para o final do container
-          Container(
-            margin: EdgeInsets.only(top: 8.h),
-            child: Image.asset(
-              'assets/img/parents-with-their-children-walking-forest 1.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 100.h, // Ajuste a altura conforme necessário
-            ),
-          ),
         ],
       ),
     );

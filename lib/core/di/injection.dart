@@ -14,39 +14,36 @@ import '../../features/account/data/datasources/account_remote_data_source.dart'
 import '../../features/account/data/repositories/account_repository_impl.dart';
 import '../../features/account/domain/repositories/account_repository.dart';
 import '../../features/account/domain/usecases/get_account_data.dart';
+import '../../features/account/domain/usecases/get_executors.dart'; // Novo caso de uso adicionado
 import '../../features/viacep/controller/viacep_controller.dart';
 import '../../features/viacep/data/datasources/viacep_remote_data_source.dart';
 import '../../features/viacep/domain/repositories/viacep_repository.dart';
 import '../../features/viacep/domain/usecases/get_cep_data.dart';
-import '../utils/constants.dart';
+import '../network/dio_client.dart';
 
-// Instância global do GetIt para gerenciamento de injeção de dependências
 final sl = GetIt.instance;
 
-// Função para configurar a injeção de dependências
 void setupInjection() {
   // Configura o DioClient
   setupDioClient();
 
   // Dependências externas
   sl.registerLazySingleton<FlutterSecureStorage>(
-      () => const FlutterSecureStorage()); // Armazenamento seguro para senhas e tokens
+      () => const FlutterSecureStorage());
   sl.registerLazySingleton<FlutterAppAuth>(
-      () => FlutterAppAuth()); // Autenticação com OAuth2/OpenID
+      () => FlutterAppAuth());
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(
-        appAuth: sl<FlutterAppAuth>(), // DataSource remoto de autenticação
+        appAuth: sl<FlutterAppAuth>(),
       ));
 
   sl.registerLazySingleton<AccountRemoteDataSource>(
       () => AccountRemoteDataSourceImpl(
-            dio: sl<Dio>(), // Usa a instância do Dio injetada
-            secureStorage: sl<
-                FlutterSecureStorage>(), // Usa a instância do FlutterSecureStorage injetada
+            dio: sl<Dio>(),
+            secureStorage: sl<FlutterSecureStorage>(),
           ));
 
-  // Registre o ViaCepRemoteDataSource
   sl.registerLazySingleton<ViaCepRemoteDataSource>(
       () => ViaCepRemoteDataSource(sl<Dio>()));
 
@@ -66,55 +63,27 @@ void setupInjection() {
 
   // Use cases
   sl.registerLazySingleton<LoginUseCase>(
-      () => LoginUseCase(sl<AuthRepository>())); // Caso de uso para login
+      () => LoginUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton<SignUpUseCase>(
-      () => SignUpUseCase(sl<AuthRepository>())); // Caso de uso para cadastro
+      () => SignUpUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton<GetAccountData>(
-      () => GetAccountData(sl<AccountRepository>())); // Caso de uso para obter dados da conta
+      () => GetAccountData(sl<AccountRepository>()));
+  sl.registerLazySingleton<GetExecutors>(
+      () => GetExecutors(sl<AccountRepository>())); // Registra o novo caso de uso
   sl.registerLazySingleton<GetCepData>(() => GetCepData(sl<ViaCepRepository>()));
 
   // Controllers
   sl.registerLazySingleton<AuthController>(() => AuthController(
-        loginUseCase: sl<LoginUseCase>(), // Controller para lidar com login
-        signUpUseCase: sl<SignUpUseCase>(), // Controller para lidar com cadastro
-        authRepository: sl<AuthRepository>(), // Adiciona o AuthRepository aqui
+        loginUseCase: sl<LoginUseCase>(),
+        signUpUseCase: sl<SignUpUseCase>(),
+        authRepository: sl<AuthRepository>(),
       ));
 
-  // Corrigido para passar o parâmetro correto para o construtor
   sl.registerFactory<AccountController>(() => AccountController(
-        sl<GetAccountData>(), // Passa o GetAccountData como argumento posicional
+        sl<GetAccountData>(),
+        sl<GetExecutors>(), // Passa o novo caso de uso para o controlador
       ));
 
   sl.registerFactory<ViaCepController>(
       () => ViaCepController(sl<GetCepData>()));
-}
-
-// Função para configurar e registrar o Dio como cliente HTTP
-void setupDioClient() {
-  final dio = Dio(
-    BaseOptions(
-      baseUrl: ApiConstants.baseUrl, // Define a URL base para todas as requisições
-      headers: {
-        'Accept': 'application/json', // Define o header padrão para aceitar respostas JSON
-      },
-    ),
-  );
-
-  // (Opcional) Adicionar interceptores para lidar com erros, log de requisições, etc.
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) {
-      // Adicione aqui lógica para manipular a requisição antes de ser enviada
-      return handler.next(options); // Continua com a requisição
-    },
-    onResponse: (response, handler) {
-      // Adicione aqui lógica para manipular a resposta antes de ser entregue
-      return handler.next(response); // Continua com a resposta
-    },
-    onError: (DioError e, handler) {
-      // Adicione aqui lógica para manipular erros
-      return handler.next(e); // Continua com o erro
-    },
-  ));
-
-  sl.registerLazySingleton<Dio>(() => dio); // Registra o Dio como singleton
 }

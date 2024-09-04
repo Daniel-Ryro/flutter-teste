@@ -7,7 +7,7 @@ import '../../../core/widgets/action_button_widget.dart';
 import '../../../core/widgets/form_widget.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/user_card_widget.dart';
-import '../widgets/vault_section.dart';
+import 'vault_section.dart';
 
 class BeneficiaryContent extends StatelessWidget {
   const BeneficiaryContent({super.key});

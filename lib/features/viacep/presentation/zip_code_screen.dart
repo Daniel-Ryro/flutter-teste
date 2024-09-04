@@ -188,7 +188,7 @@ class ZipCodeScreen extends StatelessWidget {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => MainScreen(),
+                builder: (context) => const MainScreen(),
                 settings: RouteSettings(arguments: index)),
             (Route<dynamic> route) => false,
           );

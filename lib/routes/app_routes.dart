@@ -35,42 +35,64 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case login:
-        return MaterialPageRoute(builder: (_) => const LandingScreen());
+        return GetPageRoute(
+          page: () => const LandingScreen(),
+        );
       case loginExecute:
-        return MaterialPageRoute(builder: (_) => const LoginExecuteScreen());
+        return GetPageRoute(
+          page: () => const LoginExecuteScreen(),
+        );
       case maritalStatusScreen:
-        return MaterialPageRoute(builder: (_) => MaritalStatusScreen());
+        return GetPageRoute(
+          page: () => MaritalStatusScreen(),
+        );
       case signUpScreen:
-        return MaterialPageRoute(builder: (_) => SignUpScreen());
+        return GetPageRoute(
+          page: () => SignUpScreen(),
+        );
       case homeScreen:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return GetPageRoute(
+          page: () => const HomeScreen(),
+        );
       case vaultScreen:
-        return MaterialPageRoute(builder: (_) => const VaultScreen());
-
+        return GetPageRoute(
+          page: () => const VaultScreen(),
+        );
       case dailyRoutine:
-        return MaterialPageRoute(builder: (_) => const DailyRoutineScreen());
+        return GetPageRoute(
+          page: () => const DailyRoutineScreen(),
+        );
       case main:
-        return MaterialPageRoute(builder: (_) => const MainScreen());
+        return GetPageRoute(
+          page: () => const MainScreen(),
+        );
 
-      // Aqui aplicamos o UserSettingsBindings para a rota de configurações do usuário
+      // Aplicando o UserSettingsBindings para a rota de configurações do usuário
       case userSettings:
         return GetPageRoute(
           page: () => const UserSettingsScreen(),
           binding: UserSettingsBindings(),
         );
 
+      // Aplicando o ViaCepBinding para a rota ZipCode
       case zipCode:
         return GetPageRoute(
           page: () => ZipCodeScreen(),
           binding: ViaCepBinding(),
         );
+
       case helpScreen:
-        return MaterialPageRoute(builder: (_) => const HelpSettingsScreen());
+        return GetPageRoute(
+          page: () => const HelpSettingsScreen(),
+        );
       case notificationScreen:
-        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+        return GetPageRoute(
+          page: () => const NotificationsScreen(),
+        );
+
       default:
-        return MaterialPageRoute(
-          builder: (_) => const Scaffold(
+        return GetPageRoute(
+          page: () => const Scaffold(
             body: Center(
               child: Text('Rota não encontrada'),
             ),

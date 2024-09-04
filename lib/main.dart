@@ -13,38 +13,26 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart';
 
 void main() async {
-  // Ensure Flutter's bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Load environment variables before any dependency injection
   await dotenv.load();
 
-  // Set up dependency injection
   setupInjection();
 
-  // Inicializa o FlutterSecureStorage
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
-
-  // Verifica se o usuário está logado
   String? accessToken = await secureStorage.read(key: 'accessToken');
   String initialRoute = AppRoutes.login;
 
   if (accessToken != null) {
-    // Valida o token, ou tenta renová-lo
     try {
-      // (opcional) Verifique se o token ainda é válido antes de usá-lo
-      // Caso não seja, você pode tentar renovar o token aqui
-
-      initialRoute = AppRoutes.main; // Defina a rota principal
+      initialRoute = AppRoutes.main;
     } catch (e) {
       print("Erro ao verificar ou renovar o token: $e");
-      // Se falhar, permaneça na tela de login
     }
   }
 
-  // Run the app
   runApp(MyApp(initialRoute: initialRoute));
 }
+
 class MyApp extends StatelessWidget {
   final String initialRoute;
 
@@ -63,7 +51,7 @@ class MyApp extends StatelessWidget {
           initialBinding: BindingsBuilder(() {
             Get.lazyPut<AuthController>(() => sl<AuthController>());
             Get.lazyPut<AccountController>(() => sl<AccountController>());
-            Get.put<ViaCepController>(ViaCepController(sl<GetCepData>()));
+            Get.lazyPut<ViaCepController>(() => sl<ViaCepController>());
           }),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

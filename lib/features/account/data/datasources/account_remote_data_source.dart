@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_model.dart';
+import '../models/executor_model.dart';
 
 abstract class AccountRemoteDataSource {
   Future<UserModel> getAccountData();
+  Future<List<ExecutorModel>> getExecutors(); // Novo método adicionado
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
@@ -33,26 +35,59 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             'Accept': 'application/json',
           },
           validateStatus: (status) {
-            // Aceita qualquer código de status para permitir tratamento personalizado
             return status != null && status < 500;
           },
         ),
       );
 
-      // Verificando o código de status
       if (response.statusCode == 200) {
         return UserModel.fromJson(response.data);
       } else if (response.statusCode == 401) {
         throw Exception("Erro de autenticação: Token inválido ou expirado.");
       } else {
-        throw Exception(
-            "Erro ao buscar dados da conta: Código ${response.statusCode}");
+        throw Exception("Erro ao buscar dados da conta: Código ${response.statusCode}");
       }
     } on DioException catch (e) {
-      // Tratamento de erros específicos do Dio
       throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
     } catch (e) {
-      // Tratamento de erros gerais
+      throw Exception("Erro inesperado: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<List<ExecutorModel>> getExecutors() async {
+    String? accessToken = await secureStorage.read(key: 'accessToken');
+    if (accessToken == null) {
+      throw Exception("Token não encontrado.");
+    }
+
+    try {
+      final response = await dio.get(
+        '/v1/Account/Executors',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Accept': 'application/json',
+          },
+          validateStatus: (status) {
+            return status != null && status < 500;
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> executorsJson = response.data as List<dynamic>;
+        return executorsJson
+            .map((executor) => ExecutorModel.fromJson(executor))
+            .toList();
+      } else if (response.statusCode == 401) {
+        throw Exception("Erro de autenticação: Token inválido ou expirado.");
+      } else {
+        throw Exception("Erro ao buscar dados dos executores: Código ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
+    } catch (e) {
       throw Exception("Erro inesperado: ${e.toString()}");
     }
   }
