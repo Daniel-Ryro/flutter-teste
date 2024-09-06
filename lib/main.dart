@@ -16,6 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
 
+  // Configura as injeções de dependência
   setupInjection();
 
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -29,6 +30,11 @@ void main() async {
       print("Erro ao verificar ou renovar o token: $e");
     }
   }
+
+  // Inicializa os controladores usando Get.put antes do runApp
+  Get.lazyPut<AuthController>(() => sl<AuthController>());
+  Get.lazyPut<AccountController>(() => sl<AccountController>());
+  Get.lazyPut<ViaCepController>(() => sl<ViaCepController>());
 
   runApp(MyApp(initialRoute: initialRoute));
 }
@@ -48,11 +54,6 @@ class MyApp extends StatelessWidget {
           title: 'Guarda Digital',
           initialRoute: initialRoute,
           onGenerateRoute: AppRoutes.generateRoute,
-          initialBinding: BindingsBuilder(() {
-            Get.lazyPut<AuthController>(() => sl<AuthController>());
-            Get.lazyPut<AccountController>(() => sl<AccountController>());
-            Get.lazyPut<ViaCepController>(() => sl<ViaCepController>());
-          }),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,

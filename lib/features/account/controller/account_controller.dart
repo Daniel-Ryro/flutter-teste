@@ -3,12 +3,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../core/usecases/usecase.dart';
 import '../data/models/user_model.dart';
 import '../data/models/executor_model.dart';
+import '../domain/usecases/add_executor.dart';
 import '../domain/usecases/get_account_data.dart';
 import '../domain/usecases/get_executors.dart';
+import '../domain/usecases/get_update_executor.dart';
 
 class AccountController extends GetxController {
   final GetAccountData getAccountDataUseCase;
   final GetExecutors getExecutorsUseCase;
+  //final UpdateExecutor updateExecutorUseCase;
+  final AddExecutor addExecutorUseCase;
 
   // Variáveis reativas
   var user = Rxn<UserModel>();
@@ -20,7 +24,12 @@ class AccountController extends GetxController {
 
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  AccountController(this.getAccountDataUseCase, this.getExecutorsUseCase);
+  AccountController(
+    this.getAccountDataUseCase,
+    this.getExecutorsUseCase,
+    //this.updateExecutorUseCase,
+    this.addExecutorUseCase,
+  );
 
   @override
   void onInit() {
@@ -40,7 +49,8 @@ class AccountController extends GetxController {
 
     result.fold(
       (failure) {
-        errorMessage.value = "Erro ao carregar os dados da conta: ${failure.message}";
+        errorMessage.value =
+            "Erro ao carregar os dados da conta: ${failure.message}";
         user.value = null;
       },
       (userData) {
@@ -60,11 +70,13 @@ class AccountController extends GetxController {
 
     result.fold(
       (failure) {
-        errorMessage.value = "Erro ao carregar os executores: ${failure.message}";
+        errorMessage.value =
+            "Erro ao carregar os executores: ${failure.message}";
         executors.clear(); // Limpa a lista de executores em caso de erro
       },
       (executorsData) {
-        executors.value = executorsData.cast<ExecutorModel>(); // Atribui a lista de executores recuperada
+        executors.value = executorsData
+            .cast<ExecutorModel>(); // Atribui a lista de executores recuperada
       },
     );
 
@@ -131,5 +143,43 @@ class AccountController extends GetxController {
   Future<void> updateAddress(String newAddress) async {
     address.value = newAddress;
     await saveAddress(newAddress);
+  }
+
+  // // Método para atualizar ou adicionar um executor
+  // Future<void> updateExecutor(ExecutorModel executor) async {
+  //   isLoading.value = true;
+  //   errorMessage.value = '';
+
+  //   final result = await updateExecutorUseCase.call(executor);
+
+  //   result.fold(
+  //     (failure) {
+  //       errorMessage.value = "Erro ao atualizar o executor: ${failure.message}";
+  //     },
+  //     (_) {
+  //       fetchExecutors(); // Atualiza a lista de executores após a adição ou atualização
+  //     },
+  //   );
+
+  //   isLoading.value = false;
+  // }
+
+  // Método para adicionar um novo executor
+  Future<void> addExecutor(ExecutorModel executor) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    final result = await addExecutorUseCase.call(executor);
+
+    result.fold(
+      (failure) {
+        errorMessage.value = "Erro ao adicionar o executor: ${failure.message}";
+      },
+      (_) {
+        fetchExecutors(); // Atualiza a lista de executores após a adição
+      },
+    );
+
+    isLoading.value = false;
   }
 }

@@ -7,4 +7,5 @@ import '../entities/user.dart';
 abstract class AccountRepository {
   Future<Either<Failure, User>> getAccountData();
   Future<Either<Failure, List<Executor>>> getExecutors();
+  Future<Either<Failure, void>> addExecutor(Executor executor);
 }

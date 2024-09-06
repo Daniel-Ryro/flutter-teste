@@ -1,4 +1,3 @@
-
 import '../../domain/entities/executor.dart';
 
 class ExecutorModel extends Executor {
@@ -10,7 +9,6 @@ class ExecutorModel extends Executor {
   final String cellPhone;
   final String email;
   final DateTime birthDate;
-  final String identifier;
   final String statusExecutorLabel;
   final String proofOfLifeStatusLabel;
 
@@ -23,7 +21,6 @@ class ExecutorModel extends Executor {
     required this.cellPhone,
     required this.email,
     required this.birthDate,
-    required this.identifier,
     required this.statusExecutorLabel,
     required this.proofOfLifeStatusLabel,
   }) : super(
@@ -42,7 +39,6 @@ class ExecutorModel extends Executor {
       cellPhone: json['cellPhone'],
       email: json['email'],
       birthDate: DateTime.parse(json['birthDate']),
-      identifier: json['identifier'],
       statusExecutorLabel: json['statusExecutorLabel'],
       proofOfLifeStatusLabel: json['proofOfLifeStatusLabel'],
     );
@@ -58,7 +54,6 @@ class ExecutorModel extends Executor {
       'cellPhone': cellPhone,
       'email': email,
       'birthDate': birthDate.toIso8601String(),
-      'identifier': identifier,
       'statusExecutorLabel': statusExecutorLabel,
       'proofOfLifeStatusLabel': proofOfLifeStatusLabel,
     };

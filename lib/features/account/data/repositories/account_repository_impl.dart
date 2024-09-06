@@ -32,10 +32,24 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(ServerFailure("Erro inesperado: ${e.toString()}"));
     }
   }
-   Future<Either<Failure, List<Executor>>> getExecutors() async {
+
+  @override
+  Future<Either<Failure, List<Executor>>> getExecutors() async {
     try {
       final remoteExecutors = await remoteDataSource.getExecutors();
       return Right(remoteExecutors);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Erro inesperado: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addExecutor(Executor executor) async {
+    try {
+      await remoteDataSource.addExecutor(executor);
+      return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {

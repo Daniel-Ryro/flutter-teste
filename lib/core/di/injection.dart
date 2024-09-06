@@ -4,6 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../features/account/controller/account_controller.dart';
+import '../../features/account/domain/usecases/add_executor.dart';
+import '../../features/account/domain/usecases/get_update_executor.dart';
 import '../../features/login/controllers/auth_controller.dart';
 import '../../features/login/data/datasources/auth_remote_data_source.dart';
 import '../../features/login/data/repositories/auth_repository_impl.dart';
@@ -14,7 +16,7 @@ import '../../features/account/data/datasources/account_remote_data_source.dart'
 import '../../features/account/data/repositories/account_repository_impl.dart';
 import '../../features/account/domain/repositories/account_repository.dart';
 import '../../features/account/domain/usecases/get_account_data.dart';
-import '../../features/account/domain/usecases/get_executors.dart'; // Novo caso de uso adicionado
+import '../../features/account/domain/usecases/get_executors.dart';
 import '../../features/viacep/controller/viacep_controller.dart';
 import '../../features/viacep/data/datasources/viacep_remote_data_source.dart';
 import '../../features/viacep/domain/repositories/viacep_repository.dart';
@@ -30,8 +32,7 @@ void setupInjection() {
   // Dependências externas
   sl.registerLazySingleton<FlutterSecureStorage>(
       () => const FlutterSecureStorage());
-  sl.registerLazySingleton<FlutterAppAuth>(
-      () => FlutterAppAuth());
+  sl.registerLazySingleton<FlutterAppAuth>(() => FlutterAppAuth());
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(
@@ -68,9 +69,14 @@ void setupInjection() {
       () => SignUpUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton<GetAccountData>(
       () => GetAccountData(sl<AccountRepository>()));
-  sl.registerLazySingleton<GetExecutors>(
-      () => GetExecutors(sl<AccountRepository>())); // Registra o novo caso de uso
-  sl.registerLazySingleton<GetCepData>(() => GetCepData(sl<ViaCepRepository>()));
+  sl.registerLazySingleton<GetExecutors>(() =>
+      GetExecutors(sl<AccountRepository>())); // Registra o novo caso de uso
+  sl.registerLazySingleton<GetCepData>(
+      () => GetCepData(sl<ViaCepRepository>()));
+  // sl.registerLazySingleton<UpdateExecutor>(
+  //     () => UpdateExecutor(sl<AccountRepository>()));
+  sl.registerLazySingleton<AddExecutor>(
+      () => AddExecutor(sl<AccountRepository>()));
 
   // Controllers
   sl.registerLazySingleton<AuthController>(() => AuthController(
@@ -82,6 +88,8 @@ void setupInjection() {
   sl.registerFactory<AccountController>(() => AccountController(
         sl<GetAccountData>(),
         sl<GetExecutors>(), // Passa o novo caso de uso para o controlador
+        //sl<UpdateExecutor>(),
+        sl<AddExecutor>(),
       ));
 
   sl.registerFactory<ViaCepController>(

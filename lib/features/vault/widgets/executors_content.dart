@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:guarda_digital_flutter/styles.dart';
-import 'package:get/get.dart'; // Import GetX para usar o controlador
+import 'package:get/get.dart';
 import '../../account/controller/account_controller.dart';
 
 import '../../../core/widgets/action_button_widget.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/user_card_widget.dart';
+import '../../account/data/models/executor_model.dart';
 import '../widgets/vault_section.dart';
-import 'executor_form_modal.dart'; // Importe o widget do formulário de executor
+import 'executor_form_modal.dart';
 
 class ExecutorsContent extends StatelessWidget {
   const ExecutorsContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Instância do controlador de conta
     final AccountController accountController = Get.find<AccountController>();
 
     return Column(
@@ -59,6 +59,7 @@ class ExecutorsContent extends StatelessWidget {
                 ),
                 text: 'Adicionar',
                 onPressed: () {
+                  // Passa um novo executor vazio para adicionar
                   _showExecutorForm(context);
                 },
                 textColor: Colors.white,
@@ -72,7 +73,6 @@ class ExecutorsContent extends StatelessWidget {
           ),
         ),
         SizedBox(height: 18.h),
-        // Use Obx para escutar mudanças na lista de executores
         Obx(() {
           if (accountController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
@@ -80,20 +80,16 @@ class ExecutorsContent extends StatelessWidget {
           if (accountController.executors.isEmpty) {
             return const Center(child: Text('Nenhum executor encontrado.'));
           }
-          // Renderiza a lista de executores
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: accountController.executors.length,
             itemBuilder: (context, index) {
               final executor = accountController.executors[index];
-              
-              // Define o ícone apenas se o status for "Accepted"
               IconData? trailingIcon;
               if (executor.statusExecutorLabel == 'Accepted') {
-                trailingIcon = Icons.check_circle; // Ícone de confirmação
+                trailingIcon = Icons.check_circle;
               }
-
               return CompactUserCard(
                 name: '${executor.firstName} ${executor.lastName}',
                 email: executor.email,
@@ -103,11 +99,11 @@ class ExecutorsContent extends StatelessWidget {
                 trailingIcon: trailingIcon != null
                     ? Icon(
                         trailingIcon,
-                        color: Colors.green, // Cor verde para ícone de confirmação
+                        color: Colors.green,
                       )
-                    : null, // Não exibe nenhum ícone se não for "Accepted"
+                    : null,
                 onTap: () {
-                  // Handle card tap
+                  // Não faz nada ao clicar, pois a edição foi removida
                 },
               );
             },
@@ -117,6 +113,7 @@ class ExecutorsContent extends StatelessWidget {
     );
   }
 
+  // Método para abrir o formulário de adicionar executor
   void _showExecutorForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -128,7 +125,25 @@ class ExecutorsContent extends StatelessWidget {
         ),
       ),
       builder: (BuildContext context) {
-        return const ExecutorFormModal();
+        // Passa um novo executor vazio para o modal de adicionar
+        return ExecutorFormModal(
+          executor: ExecutorModel(
+            personId: 0,
+            accountId: 0,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            cellPhone: '',
+            email: '',
+            birthDate: DateTime.now(),
+            statusExecutorLabel: '',
+            proofOfLifeStatusLabel: '',
+          ),
+          onSave: (newExecutor) {
+            // Adicionando novo executor
+            Get.find<AccountController>().addExecutor(newExecutor);
+          },
+        );
       },
     );
   }
