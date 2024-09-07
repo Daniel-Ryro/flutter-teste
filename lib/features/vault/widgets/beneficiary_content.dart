@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/add_benefiary_form_modal.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 
 import '../../../core/widgets/action_button_widget.dart';
-import '../../../core/widgets/form_widget.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/user_card_widget.dart';
+import '../../account/controller/account_controller.dart';
+import '../../account/data/models/beneficiary_model.dart';
 import 'vault_section.dart';
 
 class BeneficiaryContent extends StatelessWidget {
@@ -14,6 +17,9 @@ class BeneficiaryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtém o controlador
+    final AccountController controller = Get.find<AccountController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,7 +48,7 @@ class BeneficiaryContent extends StatelessWidget {
               ),
               text: 'Adicionar',
               onPressed: () {
-                _showExecutorForm(context);
+                _showBeneficiaryForm(context);
               },
               textColor: Colors.white,
               buttonColor: AppColors.pink,
@@ -53,23 +59,33 @@ class BeneficiaryContent extends StatelessWidget {
             ),
           ),
         ),
-        CompactUserCard(
-          name: 'John Doe',
-          email: 'johndoe@example.com',
-          avatarColor: AppColors.pink,
-          iconSize: 50.0,
-          avatarRadius: 30.0,
-          trailingIcon: const Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.black,
-          ),
-          onTap: () {},
-        ),
+        // Observa mudanças na lista de beneficiários
+        Obx(() {
+          return Column(
+            children: controller.beneficiaries.map((beneficiary) {
+              return CompactUserCard(
+                name: "${beneficiary.firstName} ${beneficiary.lastName}",
+                email: beneficiary.email,
+                avatarColor: AppColors.pink,
+                iconSize: 50.0,
+                avatarRadius: 30.0,
+                trailingIcon: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black,
+                ),
+                onTap: () {
+                  // Ação ao tocar no card do beneficiário
+                },
+              );
+            }).toList(),
+          );
+        }),
       ],
     );
   }
 
-  void _showExecutorForm(BuildContext context) {
+  // Método para abrir o formulário de adicionar beneficiário
+  void _showBeneficiaryForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -80,34 +96,21 @@ class BeneficiaryContent extends StatelessWidget {
         ),
       ),
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+        return BeneficiaryFormModal(
+          beneficiary: BeneficiaryModel(
+            personId: 0,
+            accountId: 0,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            cellPhone: '',
+            email: '',
+            birthDate: DateTime.now(),
           ),
-          child: SingleChildScrollView(
-            child: ExecutorForm(
-              title: 'Adicionar Benificiários',
-              firstNameLabel: 'Primeiro Nome',
-              secondNameLabel: 'Segundo nome',
-              lastNameLabel: 'Último Nome',
-              emailLabel: 'Email',
-              birthDateLabel: 'Data de Nascimento',
-              phoneLabel: 'Celular',
-              insertPhotoLabel: 'Inserir Foto',
-              insertPhotoColor: AppColors.pink,
-              onInsertPhoto: () {},
-              cancelButtonText: 'Cancelar',
-              saveButtonText: 'Salvar',
-              cancelButtonColor: AppColors.purpleButton,
-              cancelButtonTextColor: AppColors.purpleButton,
-              onCancel: () {
-                Navigator.of(context).pop();
-              },
-              onSave: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
+          onSave: (newBeneficiary) {
+            Get.find<AccountController>()
+                .addOrUpdateBeneficiary(newBeneficiary);
+          },
         );
       },
     );

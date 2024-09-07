@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../domain/entities/beneficiary.dart';
 import '../../domain/entities/executor.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/account_repository.dart';
@@ -50,6 +51,18 @@ class AccountRepositoryImpl implements AccountRepository {
     try {
       await remoteDataSource.addExecutor(executor);
       return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("Erro inesperado: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Beneficiary>>> getBeneficiaries() async {
+    try {
+      final remoteBeneficiaries = await remoteDataSource.getBeneficiaries();
+      return Right(remoteBeneficiaries);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart'; // Import necessário para usar o GetX
+import 'package:get/get.dart';
 import 'package:guarda_digital_flutter/features/vault/widgets/vault_sections.dart';
 import '../../account/controller/account_controller.dart';
 import 'beneficiaries_section.dart';
@@ -47,7 +47,13 @@ class TabViewContent extends StatelessWidget {
                 return ExecutorsSection(executors: accountController.executors);
               }),
               SizedBox(height: 16.h),
-              const BeneficiariesSection(),
+              Obx(() {
+                if (accountController.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return BeneficiariesSection(
+                    beneficiaries: accountController.beneficiaries);
+              }),
             ],
           ),
         ),

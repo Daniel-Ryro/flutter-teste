@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:guarda_digital_flutter/features/account/domain/usecases/get_beneficiaries.dart';
 
 import '../../features/account/controller/account_controller.dart';
 import '../../features/account/domain/usecases/add_executor.dart';
@@ -70,11 +71,11 @@ void setupInjection() {
   sl.registerLazySingleton<GetAccountData>(
       () => GetAccountData(sl<AccountRepository>()));
   sl.registerLazySingleton<GetExecutors>(() =>
-      GetExecutors(sl<AccountRepository>())); // Registra o novo caso de uso
+      GetExecutors(sl<AccountRepository>()));
+  sl.registerLazySingleton<GetBeneficiaries>(() =>
+      GetBeneficiaries(sl<AccountRepository>())); // Certifique-se de registrar aqui
   sl.registerLazySingleton<GetCepData>(
       () => GetCepData(sl<ViaCepRepository>()));
-  // sl.registerLazySingleton<UpdateExecutor>(
-  //     () => UpdateExecutor(sl<AccountRepository>()));
   sl.registerLazySingleton<AddExecutor>(
       () => AddExecutor(sl<AccountRepository>()));
 
@@ -87,9 +88,9 @@ void setupInjection() {
 
   sl.registerFactory<AccountController>(() => AccountController(
         sl<GetAccountData>(),
-        sl<GetExecutors>(), // Passa o novo caso de uso para o controlador
-        //sl<UpdateExecutor>(),
+        sl<GetExecutors>(),
         sl<AddExecutor>(),
+        sl<GetBeneficiaries>(), // Passa o caso de uso registrado para o controlador
       ));
 
   sl.registerFactory<ViaCepController>(

@@ -3,20 +3,24 @@ import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../core/usecases/usecase.dart';
 import '../data/datasources/account_remote_data_source.dart';
+import '../data/models/beneficiary_model.dart';
 import '../data/models/user_model.dart';
 import '../data/models/executor_model.dart';
 import '../domain/usecases/add_executor.dart';
 import '../domain/usecases/get_account_data.dart';
+import '../domain/usecases/get_beneficiaries.dart';
 import '../domain/usecases/get_executors.dart';
 
 class AccountController extends GetxController {
   final GetAccountData getAccountDataUseCase;
   final GetExecutors getExecutorsUseCase;
   final AddExecutor addExecutorUseCase;
+  final GetBeneficiaries getBeneficiariesUseCase;
 
   // Variáveis reativas
   var user = Rxn<UserModel>();
-  var executors = <ExecutorModel>[].obs; // Lista de executores
+  var executors = <ExecutorModel>[].obs;
+  var beneficiaries = <BeneficiaryModel>[].obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   var maritalStatus = ''.obs;
@@ -28,13 +32,15 @@ class AccountController extends GetxController {
     this.getAccountDataUseCase,
     this.getExecutorsUseCase,
     this.addExecutorUseCase,
+    this.getBeneficiariesUseCase,
   );
 
   @override
   void onInit() {
     super.onInit();
     fetchAccountData();
-    fetchExecutors(); // Chama o método para buscar os executores ao iniciar
+    fetchExecutors();
+    fetchBeneficiaries(); // Chama o método para buscar os beneficiários ao iniciar
     loadMaritalStatus();
     loadAddress();
   }
@@ -74,8 +80,28 @@ class AccountController extends GetxController {
         executors.clear(); // Limpa a lista de executores em caso de erro
       },
       (executorsData) {
-        executors.value = executorsData
-            .cast<ExecutorModel>(); // Atribui a lista de executores recuperada
+        executors.value = executorsData.cast<ExecutorModel>();
+      },
+    );
+
+    isLoading.value = false;
+  }
+
+  // Função para buscar a lista de beneficiários
+  void fetchBeneficiaries() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    final result = await getBeneficiariesUseCase.call(const NoParams());
+
+    result.fold(
+      (failure) {
+        errorMessage.value =
+            "Erro ao carregar os beneficiários: ${failure.message}";
+        beneficiaries.clear(); // Limpa a lista de beneficiários em caso de erro
+      },
+      (beneficiariesData) {
+        beneficiaries.value = beneficiariesData.cast<BeneficiaryModel>();
       },
     );
 
@@ -88,19 +114,14 @@ class AccountController extends GetxController {
     errorMessage.value = '';
 
     try {
-      // Verifica se o executor já existe com base no personId
       int existingIndex =
           executors.indexWhere((e) => e.personId == executor.personId);
 
       if (existingIndex != -1) {
-        // Se o executor já existe, atualize-o
         executors[existingIndex] = executor;
         print('Executor atualizado localmente na lista.');
-
-        // Envie a lista atualizada para a API
         await _sendUpdatedExecutorsToApi();
       } else {
-        // Se o executor não existe, adicione-o
         final result = await addExecutorUseCase.call(executor);
 
         result.fold(
@@ -109,7 +130,7 @@ class AccountController extends GetxController {
                 "Erro ao adicionar o executor: ${failure.message}";
           },
           (_) {
-            fetchExecutors(); // Atualiza a lista de executores após a adição
+            fetchExecutors();
           },
         );
       }
@@ -123,24 +144,22 @@ class AccountController extends GetxController {
   // Método para enviar a lista atualizada de executores para a API
   Future<void> _sendUpdatedExecutorsToApi() async {
     final data = {
+      "command": "update", // Adicione o campo de comando necessário aqui
       "executors": executors.map((executor) => executor.toJson()).toList(),
     };
 
     try {
       print("Enviando dados atualizados: $data");
       await AccountRemoteDataSourceImpl(
-              dio: Dio(), secureStorage: secureStorage)
-          .sendRequest('/v1/Account/Executors', data);
+        dio: Dio(),
+        secureStorage: secureStorage,
+      ).sendRequest('/v1/Account/Executors', data);
 
-      // Verifica se a atualização foi bem-sucedida
       List<ExecutorModel> updatedExecutors =
           await getExecutorsUseCase.call(const NoParams()).then((result) {
         return result.fold(
-          (l) =>
-              <ExecutorModel>[], // Retorna uma lista vazia de ExecutorModel em caso de erro
-          (r) => r
-              .map((executor) => executor as ExecutorModel)
-              .toList(), // Converte cada Executor para ExecutorModel
+          (l) => <ExecutorModel>[],
+          (r) => r.map((executor) => executor as ExecutorModel).toList(),
         );
       });
 
@@ -148,6 +167,70 @@ class AccountController extends GetxController {
       print("Executores atualizados após PATCH: $updatedExecutors");
     } catch (e) {
       print('Erro ao enviar a lista atualizada de executores: $e');
+    }
+  }
+
+  // Método para adicionar ou atualizar um beneficiário
+  Future<void> addOrUpdateBeneficiary(BeneficiaryModel beneficiary) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      int existingIndex =
+          beneficiaries.indexWhere((b) => b.personId == beneficiary.personId);
+
+      if (existingIndex != -1) {
+        beneficiaries[existingIndex] = beneficiary;
+        print('Beneficiário atualizado localmente na lista.');
+        await _sendUpdatedBeneficiariesToApi();
+      } else {
+        beneficiaries.add(beneficiary);
+        await _sendUpdatedBeneficiariesToApi();
+        print('Beneficiário adicionado e lista atualizada.');
+      }
+    } catch (e) {
+      print('Erro ao adicionar ou atualizar beneficiário: $e');
+      errorMessage.value = "Erro ao adicionar ou atualizar beneficiário: $e";
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+// Método para enviar a lista atualizada de beneficiários para a API
+  Future<void> _sendUpdatedBeneficiariesToApi() async {
+    final data = {
+      "command": "update", // Adicione o campo de comando necessário aqui
+      "beneficiaries": beneficiaries.map((beneficiary) {
+        return beneficiary.toJson()
+          ..["statusExecutor"] =
+              int.tryParse(beneficiary.statusExecutor.toString()) ??
+                  0; // Certifica que statusExecutor é um inteiro
+      }).toList(),
+    };
+
+    try {
+      print("Enviando dados atualizados de beneficiários: $data");
+      await AccountRemoteDataSourceImpl(
+        dio: Dio(),
+        secureStorage: secureStorage,
+      ).sendRequest('/v1/Account/Beneficiaries', data);
+
+      // Verifica se a atualização foi bem-sucedida
+      List<BeneficiaryModel> updatedBeneficiaries =
+          await getBeneficiariesUseCase.call(const NoParams()).then((result) {
+        return result.fold(
+          (l) => <BeneficiaryModel>[],
+          (r) =>
+              r.map((beneficiary) => beneficiary as BeneficiaryModel).toList(),
+        );
+      });
+
+      beneficiaries.value = updatedBeneficiaries;
+      print("Beneficiários atualizados após PATCH: $updatedBeneficiaries");
+    } catch (e) {
+      print('Erro ao enviar a lista atualizada de beneficiários: $e');
+      errorMessage.value =
+          "Erro ao enviar a lista atualizada de beneficiários: $e";
     }
   }
 
@@ -186,25 +269,6 @@ class AccountController extends GetxController {
     }
   }
 
-   // Método para remover um executor pelo personId
-  Future<void> removeExecutor(String personId) async {
-    isLoading.value = true;
-    errorMessage.value = '';
-
-    try {
-      // Filtra a lista para remover o executor com o personId correspondente
-      executors.removeWhere((executor) => executor.personId.toString() == personId);
-      print('Executor removido localmente. Atualizando no servidor...');
-
-      // Envia a lista atualizada para o servidor
-      await _sendUpdatedExecutorsToApi();
-    } catch (e) {
-      errorMessage.value = "Erro ao remover o executor: $e";
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   Future<void> loadAddress() async {
     try {
       String? savedAddress = await secureStorage.read(key: 'address');
@@ -225,5 +289,23 @@ class AccountController extends GetxController {
   Future<void> updateAddress(String newAddress) async {
     address.value = newAddress;
     await saveAddress(newAddress);
+  }
+
+  // Método para remover um executor pelo personId
+  Future<void> removeExecutor(String personId) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      executors
+          .removeWhere((executor) => executor.personId.toString() == personId);
+      print('Executor removido localmente. Atualizando no servidor...');
+
+      await _sendUpdatedExecutorsToApi();
+    } catch (e) {
+      errorMessage.value = "Erro ao remover o executor: $e";
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
