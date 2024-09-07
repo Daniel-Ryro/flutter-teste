@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/update_executor_form_modal.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 import 'package:get/get.dart';
 import '../../account/controller/account_controller.dart';
@@ -10,7 +11,7 @@ import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/user_card_widget.dart';
 import '../../account/data/models/executor_model.dart';
 import '../widgets/vault_section.dart';
-import 'executor_form_modal.dart';
+import 'add_executor_form_modal.dart';
 
 class ExecutorsContent extends StatelessWidget {
   const ExecutorsContent({super.key});
@@ -103,7 +104,7 @@ class ExecutorsContent extends StatelessWidget {
                       )
                     : null,
                 onTap: () {
-                  // Não faz nada ao clicar, pois a edição foi removida
+                  _showExecutorOptions(context, executor);
                 },
               );
             },
@@ -141,8 +142,85 @@ class ExecutorsContent extends StatelessWidget {
           ),
           onSave: (newExecutor) {
             // Adicionando novo executor
-            Get.find<AccountController>().addExecutor(newExecutor);
+            Get.find<AccountController>().addOrUpdateExecutor(newExecutor);
           },
+        );
+      },
+    );
+  }
+
+  void _showEditExecutorForm(BuildContext context, ExecutorModel executor) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return UpdateExecutorFormModal(
+          executor: executor,
+          onSave: (updatedExecutor) {
+            Get.find<AccountController>().addOrUpdateExecutor(updatedExecutor);
+          },
+        );
+      },
+    );
+  }
+
+  // Método para mostrar as opções do executor
+  void _showExecutorOptions(BuildContext context, ExecutorModel executor) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Editar Executor'),
+              onTap: () {
+                Navigator.pop(context);
+                _showEditExecutorForm(context, executor);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete),
+              title: Text('Remover Executor'),
+              onTap: () {
+                Navigator.pop(context);
+                _confirmDeleteExecutor(context, executor);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Método para confirmar a remoção do executor
+  void _confirmDeleteExecutor(BuildContext context, ExecutorModel executor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar Remoção'),
+          content: Text('Tem certeza de que deseja remover este executor?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.find<AccountController>().removeExecutor(executor.personId.toString());
+                Navigator.of(context).pop();
+              },
+              child: Text('Remover'),
+            ),
+          ],
         );
       },
     );

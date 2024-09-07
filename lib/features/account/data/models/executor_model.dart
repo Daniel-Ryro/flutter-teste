@@ -58,4 +58,32 @@ class ExecutorModel extends Executor {
       'proofOfLifeStatusLabel': proofOfLifeStatusLabel,
     };
   }
+
+  // Método copyWith para criar uma nova instância com valores atualizados
+  ExecutorModel copyWith({
+    int? personId,
+    int? accountId,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? cellPhone,
+    String? email,
+    DateTime? birthDate,
+    String? statusExecutorLabel,
+    String? proofOfLifeStatusLabel,
+  }) {
+    return ExecutorModel(
+      personId: personId ?? this.personId,
+      accountId: accountId ?? this.accountId,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      cellPhone: cellPhone ?? this.cellPhone,
+      email: email ?? this.email,
+      birthDate: birthDate ?? this.birthDate,
+      statusExecutorLabel: statusExecutorLabel ?? this.statusExecutorLabel,
+      proofOfLifeStatusLabel:
+          proofOfLifeStatusLabel ?? this.proofOfLifeStatusLabel,
+    );
+  }
 }

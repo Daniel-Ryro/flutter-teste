@@ -9,6 +9,8 @@ abstract class AccountRemoteDataSource {
   Future<List<ExecutorModel>> getExecutors();
   Future<void> updateExecutor(Executor executor);
   Future<void> addExecutor(Executor executor);
+  Future<void> sendRequest(String url,
+      Map<String, dynamic> data); // Tornando o método público na interface
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
@@ -18,7 +20,11 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   AccountRemoteDataSourceImpl({
     required this.dio,
     required this.secureStorage,
-  });
+  }) {
+    // Definindo a URL base para todas as requisições
+    dio.options.baseUrl =
+        'https://api.guardadigital.com.br'; // Substitua pelo host da sua API
+  }
 
   @override
   Future<UserModel> getAccountData() async {
@@ -95,14 +101,17 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     }
   }
 
-  // Método para enviar a requisição HTTP com os dados necessários
-  Future<void> _sendRequest(String url, Map<String, dynamic> data) async {
+ @override
+  Future<void> sendRequest(String url, Map<String, dynamic> data) async {
     String? accessToken = await secureStorage.read(key: 'accessToken');
     if (accessToken == null) {
       throw Exception("Token não encontrado.");
     }
 
     try {
+      print("Enviando requisição para: $url");
+      print("Dados enviados: $data");
+
       final response = await dio.patch(
         url,
         data: data,
@@ -113,15 +122,20 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             'Content-Type': 'application/json',
           },
           validateStatus: (status) {
+            // Permite códigos de status diferentes para melhor tratamento de erro
             return status != null && status < 500;
           },
         ),
       );
 
       if (response.statusCode != 200) {
-        throw Exception("Erro ao atualizar executor: Código ${response.statusCode}");
+        // Log detalhado para diagnóstico
+        print("Erro na resposta do servidor: ${response.data}");
+        throw Exception(
+            "Erro ao atualizar executor: Código ${response.statusCode} - ${response.data}");
       }
     } on DioException catch (e) {
+      print("Erro de comunicação com o servidor: ${e.message}");
       throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
     }
   }
@@ -129,22 +143,24 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<void> updateExecutor(Executor executor) async {
     final data = executor.toJson();
-    await _sendRequest('/v1/Account/Executors/${executor.id}', data);
+    await sendRequest('/v1/Account/Executors/${executor.id}', data);
   }
 
   @override
   Future<void> addExecutor(Executor executor) async {
-    // Passo 1: Obter a lista atual de executores
     List<ExecutorModel> executors = await getExecutors();
 
-    // Passo 2: Adicionar o novo executor à lista existente
     executors.add(executor as ExecutorModel);
 
-    // Passo 3: Converter a lista para JSON e enviar a requisição
     final data = {
       "executors": executors.map((executor) => executor.toJson()).toList(),
     };
 
-    await _sendRequest('/v1/Account/Executors', data);
+    print("Enviando dados: $data");
+
+    await sendRequest('/v1/Account/Executors', data);
+
+    List<ExecutorModel> updatedExecutors = await getExecutors();
+    print("Executores atualizados após PATCH: $updatedExecutors");
   }
 }

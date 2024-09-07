@@ -1,17 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../core/usecases/usecase.dart';
+import '../data/datasources/account_remote_data_source.dart';
 import '../data/models/user_model.dart';
 import '../data/models/executor_model.dart';
 import '../domain/usecases/add_executor.dart';
 import '../domain/usecases/get_account_data.dart';
 import '../domain/usecases/get_executors.dart';
-import '../domain/usecases/get_update_executor.dart';
 
 class AccountController extends GetxController {
   final GetAccountData getAccountDataUseCase;
   final GetExecutors getExecutorsUseCase;
-  //final UpdateExecutor updateExecutorUseCase;
   final AddExecutor addExecutorUseCase;
 
   // Variáveis reativas
@@ -27,7 +27,6 @@ class AccountController extends GetxController {
   AccountController(
     this.getAccountDataUseCase,
     this.getExecutorsUseCase,
-    //this.updateExecutorUseCase,
     this.addExecutorUseCase,
   );
 
@@ -83,7 +82,76 @@ class AccountController extends GetxController {
     isLoading.value = false;
   }
 
-  // Função para salvar o estado civil
+  // Método para adicionar ou atualizar um executor
+  Future<void> addOrUpdateExecutor(ExecutorModel executor) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      // Verifica se o executor já existe com base no personId
+      int existingIndex =
+          executors.indexWhere((e) => e.personId == executor.personId);
+
+      if (existingIndex != -1) {
+        // Se o executor já existe, atualize-o
+        executors[existingIndex] = executor;
+        print('Executor atualizado localmente na lista.');
+
+        // Envie a lista atualizada para a API
+        await _sendUpdatedExecutorsToApi();
+      } else {
+        // Se o executor não existe, adicione-o
+        final result = await addExecutorUseCase.call(executor);
+
+        result.fold(
+          (failure) {
+            errorMessage.value =
+                "Erro ao adicionar o executor: ${failure.message}";
+          },
+          (_) {
+            fetchExecutors(); // Atualiza a lista de executores após a adição
+          },
+        );
+      }
+    } catch (e) {
+      print('Erro ao adicionar ou atualizar executor: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Método para enviar a lista atualizada de executores para a API
+  Future<void> _sendUpdatedExecutorsToApi() async {
+    final data = {
+      "executors": executors.map((executor) => executor.toJson()).toList(),
+    };
+
+    try {
+      print("Enviando dados atualizados: $data");
+      await AccountRemoteDataSourceImpl(
+              dio: Dio(), secureStorage: secureStorage)
+          .sendRequest('/v1/Account/Executors', data);
+
+      // Verifica se a atualização foi bem-sucedida
+      List<ExecutorModel> updatedExecutors =
+          await getExecutorsUseCase.call(const NoParams()).then((result) {
+        return result.fold(
+          (l) =>
+              <ExecutorModel>[], // Retorna uma lista vazia de ExecutorModel em caso de erro
+          (r) => r
+              .map((executor) => executor as ExecutorModel)
+              .toList(), // Converte cada Executor para ExecutorModel
+        );
+      });
+
+      executors.value = updatedExecutors;
+      print("Executores atualizados após PATCH: $updatedExecutors");
+    } catch (e) {
+      print('Erro ao enviar a lista atualizada de executores: $e');
+    }
+  }
+
+  // Funções para salvar e carregar estado civil e endereço
   Future<void> saveMaritalStatus(String status) async {
     try {
       await secureStorage.write(key: 'maritalStatus', value: status);
@@ -93,7 +161,6 @@ class AccountController extends GetxController {
     }
   }
 
-  // Função para carregar o estado civil
   Future<void> loadMaritalStatus() async {
     try {
       String? savedStatus = await secureStorage.read(key: 'maritalStatus');
@@ -109,7 +176,6 @@ class AccountController extends GetxController {
     }
   }
 
-  // Função para salvar o endereço
   Future<void> saveAddress(String newAddress) async {
     try {
       address.value = newAddress;
@@ -120,7 +186,25 @@ class AccountController extends GetxController {
     }
   }
 
-  // Função para carregar o endereço
+   // Método para remover um executor pelo personId
+  Future<void> removeExecutor(String personId) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      // Filtra a lista para remover o executor com o personId correspondente
+      executors.removeWhere((executor) => executor.personId.toString() == personId);
+      print('Executor removido localmente. Atualizando no servidor...');
+
+      // Envia a lista atualizada para o servidor
+      await _sendUpdatedExecutorsToApi();
+    } catch (e) {
+      errorMessage.value = "Erro ao remover o executor: $e";
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> loadAddress() async {
     try {
       String? savedAddress = await secureStorage.read(key: 'address');
@@ -133,53 +217,13 @@ class AccountController extends GetxController {
     }
   }
 
-  // Método para atualizar o estado civil
   Future<void> updateMaritalStatus(String status) async {
     maritalStatus.value = status;
     await saveMaritalStatus(status);
   }
 
-  // Método para atualizar o endereço
   Future<void> updateAddress(String newAddress) async {
     address.value = newAddress;
     await saveAddress(newAddress);
-  }
-
-  // // Método para atualizar ou adicionar um executor
-  // Future<void> updateExecutor(ExecutorModel executor) async {
-  //   isLoading.value = true;
-  //   errorMessage.value = '';
-
-  //   final result = await updateExecutorUseCase.call(executor);
-
-  //   result.fold(
-  //     (failure) {
-  //       errorMessage.value = "Erro ao atualizar o executor: ${failure.message}";
-  //     },
-  //     (_) {
-  //       fetchExecutors(); // Atualiza a lista de executores após a adição ou atualização
-  //     },
-  //   );
-
-  //   isLoading.value = false;
-  // }
-
-  // Método para adicionar um novo executor
-  Future<void> addExecutor(ExecutorModel executor) async {
-    isLoading.value = true;
-    errorMessage.value = '';
-
-    final result = await addExecutorUseCase.call(executor);
-
-    result.fold(
-      (failure) {
-        errorMessage.value = "Erro ao adicionar o executor: ${failure.message}";
-      },
-      (_) {
-        fetchExecutors(); // Atualiza a lista de executores após a adição
-      },
-    );
-
-    isLoading.value = false;
   }
 }
