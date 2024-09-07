@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:guarda_digital_flutter/features/vault/widgets/update_executor_form_modal.dart';
+import 'package:guarda_digital_flutter/features/vault/widgets/vault_section.dart';
 import 'package:guarda_digital_flutter/styles.dart';
 import 'package:get/get.dart';
 import '../../account/controller/account_controller.dart';
@@ -10,7 +11,6 @@ import '../../../core/widgets/action_button_widget.dart';
 import '../../../core/widgets/rectangle_button.dart';
 import '../../../core/widgets/user_card_widget.dart';
 import '../../account/data/models/executor_model.dart';
-import '../widgets/vault_section.dart';
 import 'add_executor_form_modal.dart';
 
 class ExecutorsContent extends StatelessWidget {

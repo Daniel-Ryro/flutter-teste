@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../styles.dart';
+
 class VaultSection extends StatelessWidget {
   final String title;
   final String description;
@@ -35,10 +37,11 @@ class VaultSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
+      height: height ?? 180.h, // Ajuste da altura conforme necessário
       padding: EdgeInsets.all(16.w),
       margin: EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
-        color: Colors.white, // Fundo branco para o card
+        color: backgroundColor ?? AppColors.primary,
         borderRadius: BorderRadius.circular(12.r), // Bordas arredondadas
         boxShadow: [
           BoxShadow(

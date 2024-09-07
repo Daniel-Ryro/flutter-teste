@@ -61,7 +61,7 @@ class _VaultScreenState extends State<VaultScreen> {
                 });
               },
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 10.h),
             _buildContent(),
           ],
         ),
