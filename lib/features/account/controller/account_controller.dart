@@ -144,7 +144,6 @@ class AccountController extends GetxController {
   // Método para enviar a lista atualizada de executores para a API
   Future<void> _sendUpdatedExecutorsToApi() async {
     final data = {
-      "command": "update", // Adicione o campo de comando necessário aqui
       "executors": executors.map((executor) => executor.toJson()).toList(),
     };
 
@@ -304,6 +303,26 @@ class AccountController extends GetxController {
       await _sendUpdatedExecutorsToApi();
     } catch (e) {
       errorMessage.value = "Erro ao remover o executor: $e";
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Método para remover um beneficiário pelo personId
+  Future<void> removeBeneficiary(String personId) async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      // Remove o beneficiário localmente da lista com base no personId
+      beneficiaries.removeWhere(
+          (beneficiary) => beneficiary.personId.toString() == personId);
+      print('Beneficiário removido localmente. Atualizando no servidor...');
+
+      // Envia a lista atualizada de beneficiários para a API
+      await _sendUpdatedBeneficiariesToApi();
+    } catch (e) {
+      errorMessage.value = "Erro ao remover o beneficiário: $e";
     } finally {
       isLoading.value = false;
     }

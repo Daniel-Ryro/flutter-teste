@@ -67,7 +67,7 @@ class ExecutorsContent extends StatelessWidget {
                 buttonColor: AppColors.pink,
                 fontSize: 16.sp,
                 borderRadius: 40.r,
-                width: 160.0,
+                width: 180.0,
                 height: 48.h,
               ),
             ),
@@ -179,16 +179,16 @@ class ExecutorsContent extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Editar Executor'),
+              leading: const Icon(Icons.edit),
+              title: const Text('Editar Executor'),
               onTap: () {
                 Navigator.pop(context);
                 _showEditExecutorForm(context, executor);
               },
             ),
             ListTile(
-              leading: Icon(Icons.delete),
-              title: Text('Remover Executor'),
+              leading: const Icon(Icons.delete),
+              title: const Text('Remover Executor'),
               onTap: () {
                 Navigator.pop(context);
                 _confirmDeleteExecutor(context, executor);
@@ -206,19 +206,19 @@ class ExecutorsContent extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar Remoção'),
-          content: Text('Tem certeza de que deseja remover este executor?'),
+          title: const Text('Confirmar Remoção'),
+          content: const Text('Tem certeza de que deseja remover este executor?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
             ),
             TextButton(
               onPressed: () {
                 Get.find<AccountController>().removeExecutor(executor.personId.toString());
                 Navigator.of(context).pop();
               },
-              child: Text('Remover'),
+              child: const Text('Remover'),
             ),
           ],
         );

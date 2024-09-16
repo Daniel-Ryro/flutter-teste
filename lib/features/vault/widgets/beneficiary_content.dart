@@ -74,7 +74,7 @@ class BeneficiaryContent extends StatelessWidget {
                   color: Colors.black,
                 ),
                 onTap: () {
-                  // Ação ao tocar no card do beneficiário
+                  _showBeneficiaryOptions(context, beneficiary);
                 },
               );
             }).toList(),
@@ -111,6 +111,87 @@ class BeneficiaryContent extends StatelessWidget {
             Get.find<AccountController>()
                 .addOrUpdateBeneficiary(newBeneficiary);
           },
+        );
+      },
+    );
+  }
+
+  void _showBeneficiaryOptions(
+      BuildContext context, BeneficiaryModel beneficiary) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Editar Beneficiário'),
+              onTap: () {
+                Navigator.pop(context);
+                _showEditBeneficiaryForm(context, beneficiary);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Remover Beneficiário'),
+              onTap: () {
+                Navigator.pop(context);
+                _confirmDeleteBeneficiary(context, beneficiary);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditBeneficiaryForm(
+      BuildContext context, BeneficiaryModel beneficiary) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return BeneficiaryFormModal(
+          beneficiary: beneficiary,
+          onSave: (updatedBeneficiary) {
+            Get.find<AccountController>()
+                .addOrUpdateBeneficiary(updatedBeneficiary);
+          },
+        );
+      },
+    );
+  }
+
+  void _confirmDeleteBeneficiary(
+      BuildContext context, BeneficiaryModel beneficiary) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Remoção'),
+          content: const Text(
+              'Tem certeza de que deseja remover este beneficiário?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.find<AccountController>()
+                    .removeBeneficiary(beneficiary.personId.toString());
+                Navigator.of(context).pop();
+              },
+              child: const Text('Remover'),
+            ),
+          ],
         );
       },
     );
