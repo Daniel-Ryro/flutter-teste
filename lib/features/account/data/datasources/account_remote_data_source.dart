@@ -12,7 +12,6 @@ abstract class AccountRemoteDataSource {
   Future<void> updateExecutor(Executor executor);
   Future<void> addExecutor(Executor executor);
   Future<void> saveBeneficiary(Beneficiary beneficiary);
-  Future<void> sendRequest(String url, Map<String, dynamic> data);
   Future<List<BeneficiaryModel>> getBeneficiaries();
 }
 
@@ -24,40 +23,49 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     required this.dio,
     required this.secureStorage,
   }) {
-    // Definindo a URL base para todas as requisições
-    dio.options.baseUrl =
-        'https://api.guardadigital.com.br'; // Substitua pelo host da sua API
+    dio.options.baseUrl = 'https://api.guardadigital.com.br';
+  }
+
+  // Método auxiliar para obter o token de acesso
+  Future<String> _getAccessToken() async {
+    final accessToken = await secureStorage.read(key: 'accessToken');
+    if (accessToken == null) {
+      throw Exception("Token não encontrado.");
+    }
+    return accessToken;
+  }
+
+  // Método auxiliar para preparar as opções de requisição
+  Future<Options> _getRequestOptions() async {
+    final accessToken = await _getAccessToken();
+    return Options(
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Accept': 'application/json',
+      },
+      validateStatus: (status) => status != null && status < 500,
+    );
+  }
+
+  // Método auxiliar para lidar com respostas da API
+  void _handleResponse(Response response, {String? errorMessage}) {
+    if (response.statusCode == 401) {
+      throw Exception("Erro de autenticação: Token inválido ou expirado.");
+    } else if (response.statusCode != 200) {
+      throw Exception(
+          errorMessage ?? "Erro na requisição: Código ${response.statusCode}");
+    }
   }
 
   @override
   Future<UserModel> getAccountData() async {
-    String? accessToken = await secureStorage.read(key: 'accessToken');
-    if (accessToken == null) {
-      throw Exception("Token não encontrado.");
-    }
-
     try {
       final response = await dio.get(
         '/v1/Account',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Accept': 'application/json',
-          },
-          validateStatus: (status) {
-            return status != null && status < 500;
-          },
-        ),
+        options: await _getRequestOptions(),
       );
-
-      if (response.statusCode == 200) {
-        return UserModel.fromJson(response.data);
-      } else if (response.statusCode == 401) {
-        throw Exception("Erro de autenticação: Token inválido ou expirado.");
-      } else {
-        throw Exception(
-            "Erro ao buscar dados da conta: Código ${response.statusCode}");
-      }
+      _handleResponse(response, errorMessage: "Erro ao buscar dados da conta");
+      return UserModel.fromJson(response.data);
     } on DioException catch (e) {
       throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
     } catch (e) {
@@ -67,36 +75,16 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<List<ExecutorModel>> getExecutors() async {
-    String? accessToken = await secureStorage.read(key: 'accessToken');
-    if (accessToken == null) {
-      throw Exception("Token não encontrado.");
-    }
-
     try {
       final response = await dio.get(
         '/v1/Account/Executors',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Accept': 'application/json',
-          },
-          validateStatus: (status) {
-            return status != null && status < 500;
-          },
-        ),
+        options: await _getRequestOptions(),
       );
+      _handleResponse(response, errorMessage: "Erro ao buscar dados dos executores");
 
-      if (response.statusCode == 200) {
-        List<dynamic> executorsJson = response.data as List<dynamic>;
-        return executorsJson
-            .map((executor) => ExecutorModel.fromJson(executor))
-            .toList();
-      } else if (response.statusCode == 401) {
-        throw Exception("Erro de autenticação: Token inválido ou expirado.");
-      } else {
-        throw Exception(
-            "Erro ao buscar dados dos executores: Código ${response.statusCode}");
-      }
+      return (response.data as List<dynamic>)
+          .map((executor) => ExecutorModel.fromJson(executor))
+          .toList();
     } on DioException catch (e) {
       throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
     } catch (e) {
@@ -105,108 +93,57 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   }
 
   @override
-  Future<void> sendRequest(String url, Map<String, dynamic> data) async {
-    String? accessToken = await secureStorage.read(key: 'accessToken');
-    if (accessToken == null) {
-      throw Exception("Token não encontrado.");
-    }
-
+  Future<List<BeneficiaryModel>> getBeneficiaries() async {
     try {
-      print("Enviando requisição PATCH para: $url");
-      print("Dados enviados: $data");
+      final response = await dio.get(
+        '/v1/Account/Beneficiaries',
+        options: await _getRequestOptions(),
+      );
+      _handleResponse(response, errorMessage: "Erro ao buscar dados dos beneficiários");
 
+      return (response.data as List<dynamic>)
+          .map((beneficiary) => BeneficiaryModel.fromJson(beneficiary))
+          .toList();
+    } on DioException catch (e) {
+      throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
+    } catch (e) {
+      throw Exception("Erro inesperado: ${e.toString()}");
+    }
+  }
+
+  Future<void> sendRequest(String url, Map<String, dynamic> data) async {
+    try {
       final response = await dio.patch(
         url,
         data: data,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          validateStatus: (status) {
-            return status != null && status < 500;
-          },
-        ),
+        options: await _getRequestOptions(),
       );
 
-      if (response.statusCode != 200) {
-        print("Erro na resposta do servidor: ${response.data}");
-        throw Exception(
-            "Erro ao salvar dados: Código ${response.statusCode} - ${response.data}");
-      }
+      _handleResponse(response, errorMessage: "Erro ao salvar dados");
     } on DioException catch (e) {
-      print("Erro de comunicação com o servidor: ${e.message}");
       throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
     }
   }
 
   @override
   Future<void> updateExecutor(Executor executor) async {
-    final data = executor.toJson();
-    await sendRequest('/v1/Account/Executors', data);
+    await sendRequest('/v1/Account/Executors', executor.toJson());
   }
 
   @override
   Future<void> addExecutor(Executor executor) async {
     List<ExecutorModel> executors = await getExecutors();
-
     executors.add(executor as ExecutorModel);
 
     final data = {
       "executors": executors.map((executor) => executor.toJson()).toList(),
     };
 
-    print("Enviando dados: $data");
-
     await sendRequest('/v1/Account/Executors', data);
-
-    List<ExecutorModel> updatedExecutors = await getExecutors();
-    print("Executores atualizados após PATCH: $updatedExecutors");
-  }
-
-  @override
-  Future<List<BeneficiaryModel>> getBeneficiaries() async {
-    String? accessToken = await secureStorage.read(key: 'accessToken');
-    if (accessToken == null) {
-      throw Exception("Token não encontrado.");
-    }
-
-    try {
-      final response = await dio.get(
-        '/v1/Account/Beneficiaries',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Accept': 'application/json',
-          },
-          validateStatus: (status) {
-            return status != null && status < 500;
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> beneficiariesJson = response.data as List<dynamic>;
-        return beneficiariesJson
-            .map((beneficiary) => BeneficiaryModel.fromJson(beneficiary))
-            .toList();
-      } else if (response.statusCode == 401) {
-        throw Exception("Erro de autenticação: Token inválido ou expirado.");
-      } else {
-        throw Exception(
-            "Erro ao buscar dados dos beneficiários: Código ${response.statusCode}");
-      }
-    } on DioException catch (e) {
-      throw Exception("Erro ao se comunicar com o servidor: ${e.message}");
-    } catch (e) {
-      throw Exception("Erro inesperado: ${e.toString()}");
-    }
   }
 
   @override
   Future<void> saveBeneficiary(Beneficiary beneficiary) async {
-    final data = beneficiary.toJson();
-    await sendRequest('/v1/Account/Beneficiaries', data);
+    await sendRequest('/v1/Account/Beneficiaries', beneficiary.toJson());
   }
 }

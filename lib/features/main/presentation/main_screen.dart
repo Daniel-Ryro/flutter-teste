@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart'; // Import GetX
 import 'package:guarda_digital_flutter/features/home/presentation/home_screen.dart';
 import 'package:guarda_digital_flutter/features/vault/presentation/vault_screen.dart';
 
@@ -7,6 +8,7 @@ import '../../after.life/presentation/after_life_screen.dart';
 import '../../daily.routine/presentation/daily_routine_screen.dart';
 import '../../memories/presentation/memories_screen.dart';
 import '../../pets/presentation/pets_screen.dart';
+import '../../account/controller/account_controller.dart'; // Importa o AccountController
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,6 +19,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+
+  final AccountController accountController = Get.find<AccountController>();
 
   final List<Widget> _screens = [
     const HomeScreen(),

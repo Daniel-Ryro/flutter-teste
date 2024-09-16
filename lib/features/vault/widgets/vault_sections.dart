@@ -26,11 +26,11 @@ Widget buildVaultSections() {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(50.r),
               ),
-              child: const Text(
+              child: Text(
                 '1/6',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18.0,
+                  fontSize: 16.0.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -42,7 +42,8 @@ Widget buildVaultSections() {
       Expanded(
         child: VaultSection(
           title: 'Assinatura Digital',
-          description: 'Clique no botão e assine digitalmente o seu testamento digital',
+          description:
+              'Clique no botão e assine digitalmente o seu testamento digital',
           svgPath: 'assets/icon/cadastrar_ic.svg',
           backgroundColor: AppColors.blackDefault,
           iconColor: AppColors.background,

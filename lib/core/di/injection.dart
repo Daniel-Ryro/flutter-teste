@@ -70,29 +70,15 @@ void setupInjection() {
       () => SignUpUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton<GetAccountData>(
       () => GetAccountData(sl<AccountRepository>()));
-  sl.registerLazySingleton<GetExecutors>(() =>
-      GetExecutors(sl<AccountRepository>()));
-  sl.registerLazySingleton<GetBeneficiaries>(() =>
-      GetBeneficiaries(sl<AccountRepository>())); // Certifique-se de registrar aqui
+  sl.registerLazySingleton<GetExecutors>(
+      () => GetExecutors(sl<AccountRepository>()));
+  sl.registerLazySingleton<GetBeneficiaries>(
+      () => GetBeneficiaries(sl<AccountRepository>()));
   sl.registerLazySingleton<GetCepData>(
       () => GetCepData(sl<ViaCepRepository>()));
   sl.registerLazySingleton<AddExecutor>(
       () => AddExecutor(sl<AccountRepository>()));
 
-  // Controllers
-  sl.registerLazySingleton<AuthController>(() => AuthController(
-        loginUseCase: sl<LoginUseCase>(),
-        signUpUseCase: sl<SignUpUseCase>(),
-        authRepository: sl<AuthRepository>(),
-      ));
-
-  sl.registerFactory<AccountController>(() => AccountController(
-        sl<GetAccountData>(),
-        sl<GetExecutors>(),
-        sl<AddExecutor>(),
-        sl<GetBeneficiaries>(), // Passa o caso de uso registrado para o controlador
-      ));
-
-  sl.registerFactory<ViaCepController>(
+  sl.registerLazySingleton<ViaCepController>(
       () => ViaCepController(sl<GetCepData>()));
 }

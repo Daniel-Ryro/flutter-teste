@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guarda_digital_flutter/styles.dart';
+import 'package:get/get.dart'; // Import GetX
 import 'package:guarda_digital_flutter/features/vault/widgets/beneficiary_content.dart';
 import 'package:guarda_digital_flutter/features/vault/widgets/vault_content.dart';
 import 'package:guarda_digital_flutter/features/vault/widgets/executors_content.dart';
+import 'package:guarda_digital_flutter/styles.dart';
 
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/tab_icon_row_widget.dart';
 import '../../../routes/app_routes.dart';
+import '../../account/controller/account_controller.dart';
 
 class VaultScreen extends StatefulWidget {
   const VaultScreen({super.key});
@@ -17,6 +19,7 @@ class VaultScreen extends StatefulWidget {
 }
 
 class _VaultScreenState extends State<VaultScreen> {
+  final AccountController accountController = Get.find<AccountController>();
   int _selectedTabIndex = 0;
 
   @override
@@ -31,15 +34,13 @@ class _VaultScreenState extends State<VaultScreen> {
         ],
         iconActions: [
           () {
-            Navigator.pushNamed(context, AppRoutes.notificationScreen);
+            Get.toNamed(AppRoutes.notificationScreen);
           },
           () {
-            Navigator.pushNamed(context, AppRoutes.helpScreen);
+            Get.toNamed(AppRoutes.helpScreen);
           },
           () {
-            // Action for user settings icon
-            Navigator.pushNamed(context, AppRoutes.userSettings);
-            // Navigate to the user settings page
+            Get.toNamed(AppRoutes.userSettings);
           },
         ],
       ),

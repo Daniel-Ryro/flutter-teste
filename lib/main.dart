@@ -4,13 +4,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guarda_digital_flutter/features/account/controller/account_controller.dart';
-import 'package:guarda_digital_flutter/features/viacep/controller/viacep_controller.dart';
-import 'package:guarda_digital_flutter/features/viacep/domain/usecases/get_cep_data.dart';
+import 'package:guarda_digital_flutter/features/account/domain/usecases/add_executor.dart';
+import 'package:guarda_digital_flutter/features/account/domain/usecases/get_account_data.dart';
+import 'package:guarda_digital_flutter/features/account/domain/usecases/get_beneficiaries.dart';
+import 'package:guarda_digital_flutter/features/account/domain/usecases/get_executors.dart';
+import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart';
+import 'package:guarda_digital_flutter/features/login/domain/repositories/auth_repository.dart';
+import 'package:guarda_digital_flutter/features/login/domain/usecases/login_use_case.dart';
+import 'package:guarda_digital_flutter/features/login/domain/usecases/sign_up_use_case.dart';
 import 'package:guarda_digital_flutter/generated/l10n.dart';
 import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:guarda_digital_flutter/features/login/controllers/auth_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +23,19 @@ void main() async {
 
   // Configura as injeções de dependência
   setupInjection();
+
+    Get.put<AuthController>(AuthController(
+    loginUseCase: sl<LoginUseCase>(),
+    signUpUseCase: sl<SignUpUseCase>(),
+    authRepository: sl<AuthRepository>(),
+  ));
+
+  Get.put<AccountController>(AccountController(
+    sl<GetAccountData>(),
+    sl<GetExecutors>(),
+    sl<AddExecutor>(),
+    sl<GetBeneficiaries>(),
+  ));
 
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
   String? accessToken = await secureStorage.read(key: 'accessToken');
@@ -30,11 +48,6 @@ void main() async {
       print("Erro ao verificar ou renovar o token: $e");
     }
   }
-
-  // Inicializa os controladores usando Get.put antes do runApp
-  Get.lazyPut<AuthController>(() => sl<AuthController>());
-  Get.lazyPut<AccountController>(() => sl<AccountController>());
-  Get.lazyPut<ViaCepController>(() => sl<ViaCepController>());
 
   runApp(MyApp(initialRoute: initialRoute));
 }
@@ -53,7 +66,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Guarda Digital',
           initialRoute: initialRoute,
-          onGenerateRoute: AppRoutes.generateRoute,
+          getPages: AppRoutes.pages,  // Use getPages para definir as rotas
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
